@@ -867,11 +867,15 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:8px 0;
+  padding:10px 4px;
   border-bottom:1px solid var(--border);
   font-size:.87rem;
   gap:8px;
+  cursor:pointer;
+  transition:background .15s;
+  border-radius:8px;
 }
+.sim-rd-row:hover { background:rgba(255,255,255,0.03); }
 .sim-rd-row:last-child { border-bottom:none; }
 .sim-rd-q {
   color:var(--muted2);
@@ -890,6 +894,74 @@ body{
 .sim-rd-ans.fail { color:#f87171; }
 .sim-rd-ans.blank { color:var(--muted); }
 .sim-rd-correct { font-size:.75rem; color:var(--muted); }
+.sim-rd-chevron {
+  font-size:.7rem;
+  color:var(--muted);
+  transition:transform .2s;
+  flex-shrink:0;
+}
+.sim-rd-chevron.open { transform:rotate(90deg); }
+.sim-rd-expand {
+  display:none;
+  padding:4px 4px 16px;
+  margin-bottom:4px;
+  border-bottom:1px solid var(--border);
+}
+.sim-rd-expand.open { display:block; animation:slideUp .25s ease; }
+.sim-rd-expand-q {
+  font-family:'Fraunces',serif;
+  font-size:.98rem;
+  line-height:1.6;
+  color:var(--text);
+  margin-bottom:12px;
+}
+.sim-rd-expand-opt {
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:9px 12px;
+  border-radius:9px;
+  font-size:.85rem;
+  line-height:1.5;
+  margin-bottom:6px;
+  border:1.5px solid var(--border);
+  background:rgba(255,255,255,0.02);
+}
+.sim-rd-expand-opt-letter {
+  font-family:'DM Mono',monospace;
+  font-size:.68rem;
+  font-weight:700;
+  min-width:22px;
+  height:22px;
+  border-radius:6px;
+  background:var(--border);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);
+  flex-shrink:0;
+}
+.sim-rd-expand-opt.is-correct {
+  border-color:rgba(74,222,128,0.5);
+  background:rgba(74,222,128,0.08);
+}
+.sim-rd-expand-opt.is-correct .sim-rd-expand-opt-letter { background:#4ade80; color:#000; }
+.sim-rd-expand-opt.is-wrong-chosen {
+  border-color:rgba(248,113,113,0.5);
+  background:rgba(248,113,113,0.08);
+}
+.sim-rd-expand-opt.is-wrong-chosen .sim-rd-expand-opt-letter { background:#f87171; color:#000; }
+.sim-rd-expand-tag {
+  font-family:'DM Mono',monospace;
+  font-size:.62rem;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  margin-left:auto;
+  padding:2px 7px;
+  border-radius:10px;
+  flex-shrink:0;
+  white-space:nowrap;
+}
+.sim-rd-expand-tag.ok { background:rgba(74,222,128,0.15); color:#4ade80; }
+.sim-rd-expand-tag.fail { background:rgba(248,113,113,0.15); color:#f87171; }
 .sim-formula-box {
   background: rgba(34,211,238,0.05);
   border: 1px solid rgba(34,211,238,0.2);
@@ -3788,41 +3860,64 @@ function simShowResult() {
   const rowsC = document.getElementById('simDetailComunRows');
   rowsC.innerHTML = '';
   comunAll.forEach(q => {
-    const resp = simState.answers.comun[q.n];
-    const correctLetra = SIM01.respuestasOficiales.comun[q.n];
-    const correctIdx = letrasIdx[correctLetra];
-    let estado = '⬜', cls = 'blank';
-    if(resp !== undefined) {
-      estado = resp === correctIdx ? '✅' : '❌';
-      cls = resp === correctIdx ? 'ok' : 'fail';
-    }
-    const respLetra = resp !== undefined ? idxLetras[resp] : '—';
-    rowsC.innerHTML += `<div class="sim-rd-row">
-      <span class="sim-rd-q">${q.n<=10?'':'⭐ '}P${q.n}. ${q.q.substring(0,70)}${q.q.length>70?'…':''}</span>
-      <span class="sim-rd-ans ${cls}">${respLetra}</span>
-      <span class="sim-rd-correct">${estado} ${correctLetra}</span>
-    </div>`;
+    rowsC.innerHTML += simBuildDetailRow(q, simState.answers.comun[q.n], SIM01.respuestasOficiales.comun[q.n], 'c', q.n > 10);
   });
 
   // Detalle Parte Específica (solo principales)
   const rowsE = document.getElementById('simDetailEspRows');
   rowsE.innerHTML = '';
   SIM01.especifica.forEach(q => {
-    const resp = simState.answers.esp[q.n];
-    const correctLetra = SIM01.respuestasOficiales.esp[q.n];
-    const correctIdx = letrasIdx[correctLetra];
-    let estado = '⬜', cls = 'blank';
-    if(resp !== undefined) {
-      estado = resp === correctIdx ? '✅' : '❌';
-      cls = resp === correctIdx ? 'ok' : 'fail';
+    rowsE.innerHTML += simBuildDetailRow(q, simState.answers.esp[q.n], SIM01.respuestasOficiales.esp[q.n], 'e', false);
+  });
+}
+
+function simBuildDetailRow(q, resp, correctLetra, prefix, isReserva) {
+  const letrasIdx = {A:0,B:1,C:2,D:3};
+  const idxLetras = ['A','B','C','D'];
+  const correctIdx = letrasIdx[correctLetra];
+  let estado = '⬜', cls = 'blank';
+  if(resp !== undefined) {
+    estado = resp === correctIdx ? '✅' : '❌';
+    cls = resp === correctIdx ? 'ok' : 'fail';
+  }
+  const respLetra = resp !== undefined ? idxLetras[resp] : '—';
+  const rowId = 'rd_' + prefix + '_' + q.n;
+
+  const optsHtml = q.ops.map((op, i) => {
+    let extraCls = '', tagHtml = '';
+    if(i === correctIdx) {
+      extraCls = 'is-correct';
+      tagHtml = '<span class="sim-rd-expand-tag ok">Correcta</span>';
+    } else if(resp === i) {
+      extraCls = 'is-wrong-chosen';
+      tagHtml = '<span class="sim-rd-expand-tag fail">Tu respuesta</span>';
     }
-    const respLetra = resp !== undefined ? idxLetras[resp] : '—';
-    rowsE.innerHTML += `<div class="sim-rd-row">
-      <span class="sim-rd-q">P${q.n}. ${q.q.substring(0,70)}${q.q.length>70?'…':''}</span>
+    return `<div class="sim-rd-expand-opt ${extraCls}">
+      <span class="sim-rd-expand-opt-letter">${idxLetras[i]}</span>
+      <span>${op}</span>
+      ${tagHtml}
+    </div>`;
+  }).join('');
+
+  return `<div class="sim-rd-row" onclick="simToggleDetailRow('${rowId}')">
+      <span class="sim-rd-chevron" id="${rowId}_chev">▸</span>
+      <span class="sim-rd-q">${isReserva?'⭐ ':''}P${q.n}. ${q.q.substring(0,60)}${q.q.length>60?'…':''}</span>
       <span class="sim-rd-ans ${cls}">${respLetra}</span>
       <span class="sim-rd-correct">${estado} ${correctLetra}</span>
+    </div>
+    <div class="sim-rd-expand" id="${rowId}">
+      <div class="sim-rd-expand-q">${q.q}</div>
+      ${optsHtml}
     </div>`;
-  });
+}
+
+function simToggleDetailRow(rowId) {
+  const panel = document.getElementById(rowId);
+  const chev = document.getElementById(rowId + '_chev');
+  const isOpen = panel.classList.contains('open');
+  panel.classList.toggle('open', !isOpen);
+  chev.classList.toggle('open', !isOpen);
+  chev.textContent = !isOpen ? '▾' : '▸';
 }
 
 function hideAllScreens() {
