@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="TCAES 3ºC">
 <meta name="theme-color" content="#c0392b">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>TCAES 3ºC v8</title>
+<title>TCAES 3ºC</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -165,7 +165,7 @@ input[type=text]{width:100%;padding:8px 10px;border-radius:7px;border:1px solid 
 <div id="view-mi" style="flex:1;overflow:auto;padding:14px 16px">
   <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:10px">
     <button onclick="changePin()" style="padding:6px 14px;border-radius:8px;border:1px solid var(--bd);background:var(--s2);color:var(--mu);cursor:pointer;font-size:.8rem;font-family:'DM Mono',monospace">🔑 PIN</button>
-    <button id="miEditBtn" style="display:none" onclick="toggleMiEdit()" style="padding:6px 14px;border-radius:8px;border:1px solid #dee2e6;background:#fff3cd;color:#856404;cursor:pointer;font-size:.8rem;font-family:'DM Mono',monospace">🔒 Editar mi turno</button>
+    <button id="miEditBtn" style="display:none" onclick="toggleMiEdit()">🔒 Editar mi turno</button>
   </div>
   <div id="miTurnoContent"></div>
 </div>
@@ -962,6 +962,54 @@ function closeModal(){document.getElementById("overlay").classList.remove("open"
 function outsideClose(e){if(e.target.id==="overlay")closeModal();}
 window.onload=()=>{if(userName){render();renderMiTurno();showTab("mi");setTimeout(goToToday,300);}};
 </script>
+<!-- DAY ACTION MODAL -->
+<div class="overlay" id="overlayDayAction" onclick="if(event.target.id==='overlayDayAction')closeDayAction()">
+  <div class="modal">
+    <h2 id="dayActionTitle" style="font-family:Syne,sans-serif;font-size:.95rem;margin-bottom:8px"></h2>
+    <div id="dayActionTurn" style="font-size:1.1rem;font-weight:700;margin-bottom:20px;text-align:center"></div>
+    <button onclick="dayActionEdit()" style="width:100%;padding:14px;border-radius:10px;border:1.5px solid var(--bd);background:var(--s2);color:var(--tx);cursor:pointer;font-size:.88rem;font-weight:600;font-family:'DM Mono',monospace;margin-bottom:10px;text-align:left">✏️ Anotar cambio de turno</button>
+    <button onclick="dayActionPropose()" style="width:100%;padding:14px;border-radius:10px;border:1.5px solid var(--bd);background:var(--s2);color:var(--tx);cursor:pointer;font-size:.88rem;font-weight:600;font-family:'DM Mono',monospace;text-align:left">🔄 Proponer cambio con compañera/o</button>
+    <button onclick="closeDayAction()" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--bd);background:transparent;color:var(--mu);cursor:pointer;font-size:.82rem;margin-top:12px;font-family:'DM Mono',monospace">← Volver</button>
+  </div>
+</div>
+
+<!-- PROPOSAL MODAL -->
+<div class="overlay-prop" id="overlayProp" onclick="closePropModal(event)">
+  <div class="modal-prop">
+    <h2 style="font-family:Syne,sans-serif;font-size:.95rem;margin-bottom:4px">🔄 Proponer cambio</h2>
+    <p id="propMyDay" style="font-size:.78rem;color:var(--mu);margin-bottom:12px"></p>
+    <div class="slabel">Compañera/o:</div>
+    <select class="pselect" id="propPerson" onchange="loadPersonDays()">
+      <option value="">Selecciona...</option>
+    </select>
+    <div class="slabel" style="margin-top:10px">Día de ella/él que quieres:</div>
+    <select class="pselect" id="propTheirDay">
+      <option value="">Primero selecciona la persona</option>
+    </select>
+    <div class="slabel" style="margin-top:10px">Comentario:</div>
+    <input type="text" id="propComment" placeholder="Explica el motivo...">
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="prop-btn cancel" onclick="closePropModal()" style="flex:1">← Volver</button>
+      <button class="prop-btn accept" onclick="sendProposal()" style="flex:1">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESPOND MODAL -->
+<div class="overlay-prop" id="overlayRespond" onclick="closeRespondModal(event)">
+  <div class="modal-prop">
+    <h2 style="font-family:Syne,sans-serif;font-size:.95rem;margin-bottom:8px">🔄 Responder propuesta</h2>
+    <div id="respondContent"></div>
+    <div class="slabel">Tu comentario (opcional):</div>
+    <input type="text" id="respondComment" placeholder="Tu respuesta...">
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="prop-btn cancel" onclick="closeRespondModal()" style="flex:1">← Volver</button>
+      <button class="prop-btn reject" onclick="respondProposal('rejected')" style="flex:1">Rechazar</button>
+      <button class="prop-btn accept" onclick="respondProposal('accepted')" style="flex:1">Aceptar</button>
+    </div>
+  </div>
+</div>
+
 <script>
 if("serviceWorker" in navigator){
   navigator.serviceWorker.register("sw.js").catch(()=>{});
