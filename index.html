@@ -165,7 +165,7 @@ input[type=text]{width:100%;padding:8px 10px;border-radius:7px;border:1px solid 
 <div id="view-mi" style="flex:1;overflow:auto;padding:14px 16px">
   <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:10px">
     <button onclick="changePin()" style="padding:6px 14px;border-radius:8px;border:1px solid var(--bd);background:var(--s2);color:var(--mu);cursor:pointer;font-size:.8rem;font-family:'DM Mono',monospace">🔑 PIN</button>
-    <button id="miEditBtn" onclick="toggleMiEdit()" style="padding:6px 14px;border-radius:8px;border:1px solid #dee2e6;background:#fff3cd;color:#856404;cursor:pointer;font-size:.8rem;font-family:'DM Mono',monospace">🔒 Editar mi turno</button>
+    <button id="miEditBtn" style="display:none" onclick="toggleMiEdit()" style="padding:6px 14px;border-radius:8px;border:1px solid #dee2e6;background:#fff3cd;color:#856404;cursor:pointer;font-size:.8rem;font-family:'DM Mono',monospace">🔒 Editar mi turno</button>
   </div>
   <div id="miTurnoContent"></div>
 </div>
@@ -531,7 +531,7 @@ function renderMiTurno(){
         html+=`<td data-ri="${rowFor(me.startRow,mondayOf(new Date(miYear,miMonth,day)))}" data-di="${dow}" data-day="${day}" style="padding:3px 2px;text-align:center;border:1px solid var(--bd);background:${bg2};border-radius:12px;height:90px;vertical-align:middle;cursor:${miEditMode?"pointer":"default"};position:relative">
           <div style="font-size:1.1rem;font-weight:700;color:${numColor};margin-bottom:6px">${day}</div>
           <div class="mi-chip ${cls}" style="font-size:1.3rem;padding:8px 4px;display:flex;align-items:center;justify-content:center;border-radius:9px;font-weight:800;${isLorSlash?"background:#fff;color:#333;border:2px solid #333;":""}">${lbl}</div>
-          ${(!isLorSlash&&!isToday)?`<div class="propose-btn" data-dk="${(userRow-1)}_${miYear}${String(miMonth+1).padStart(2,'0')}${String(day).padStart(2,'0')}" data-turn="${lbl}" style="font-size:.55rem;color:var(--mu);cursor:pointer;margin-top:2px">🔄</div>`:""}
+
           ${iconMi?`<div onclick="showMiLog(event,${day})" style="position:absolute;top:3px;right:3px;width:14px;height:14px;background:#ffc107;border-radius:50%;font-size:.55rem;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2">✎</div>`+
           (()=>{const txt=[iconMi.con&&iconMi.con!=="—"?"🔄 "+iconMi.con:"",iconMi.comentario?"💬 "+iconMi.comentario:""].filter(Boolean).join(" ");return txt?`<div style="font-size:.55rem;color:#555;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%">${txt}</div>`:""})()
           :""}
@@ -545,17 +545,18 @@ function renderMiTurno(){
   html+=`</tbody></table>`;
   document.getElementById("miTurnoContent").innerHTML=html;
   document.getElementById("miTurnoContent").onclick=function(e){
-    // Check if clicking propose button
-    if(e.target.closest(".propose-btn")){
-      const btn = e.target.closest(".propose-btn");
-      openPropModal(btn.dataset.dk, btn.dataset.turn);
-      return;
-    }
-    if(!miEditMode)return;
     const td=e.target.closest("td[data-ri]");
-    if(!td)return;
-    const dk=(userRow-1)+"_"+miYear+String(miMonth+1).padStart(2,"0")+td.dataset.day.padStart(2,"0");
-    openEdit(parseInt(td.dataset.ri),parseInt(td.dataset.di),dk);
+    if(!td) return;
+    const day=parseInt(td.dataset.day);
+    const ri=parseInt(td.dataset.ri);
+    const di=parseInt(td.dataset.di);
+    const dk=(userRow-1)+"_"+miYear+String(miMonth+1).padStart(2,"0")+String(day).padStart(2,"0");
+    // Get turn for this day
+    const ovKey=dk;
+    const baseCell=ROTA[ri][di];
+    const cell=window.dateOverrides[ovKey]!==undefined?window.dateOverrides[ovKey]:baseCell;
+    const t=cell?cell[0]:null;
+    openDayAction(day, ri, di, dk, t);
   };
 }
 
@@ -926,6 +927,37 @@ function renderProposals(){
   div.innerHTML = html;
 }
 
+
+let dayActionCtx = null;
+
+function openDayAction(day, ri, di, dk, turno){
+  dayActionCtx = {day, ri, di, dk, turno};
+  const date = new Date(miYear, miMonth, day);
+  const DAYS_LABEL = ["Luns","Martes","Mércores","Xoves","Venres","Sábado","Domingo"];
+  const dow = (date.getDay()+6)%7;
+  document.getElementById("dayActionTitle").textContent = `${DAYS_LABEL[dow]} ${day}/${miMonth+1}/${miYear}`;
+  const cls = turno && turno!=="L" && turno!=="/" ? turno : "neu";
+  document.getElementById("dayActionTurn").textContent = turno || "Libre";
+  document.getElementById("overlayDayAction").classList.add("open");
+}
+
+function closeDayAction(){
+  document.getElementById("overlayDayAction").classList.remove("open");
+  dayActionCtx = null;
+}
+
+function dayActionEdit(){
+  if(!dayActionCtx) return;
+  closeDayAction();
+  openEdit(dayActionCtx.ri, dayActionCtx.di, dayActionCtx.dk);
+}
+
+function dayActionPropose(){
+  if(!dayActionCtx) return;
+  closeDayAction();
+  openPropModal(dayActionCtx.dk, dayActionCtx.turno);
+}
+
 function closeModal(){document.getElementById("overlay").classList.remove("open");editCtx=null;}
 function outsideClose(e){if(e.target.id==="overlay")closeModal();}
 window.onload=()=>{if(userName){render();renderMiTurno();showTab("mi");setTimeout(goToToday,300);}};
@@ -934,6 +966,30 @@ window.onload=()=>{if(userName){render();renderMiTurno();showTab("mi");setTimeou
 if("serviceWorker" in navigator){
   navigator.serviceWorker.register("sw.js").catch(()=>{});
 }
+
+// Handle Android back button
+window.addEventListener("popstate", function(){
+  // Close any open modal in reverse order
+  if(document.getElementById("overlayRespond")?.classList.contains("open")){
+    closeRespondModal(); history.pushState(null,"","");
+  } else if(document.getElementById("overlayProp")?.classList.contains("open")){
+    closePropModal(); history.pushState(null,"","");
+  } else if(document.getElementById("overlayDayAction")?.classList.contains("open")){
+    closeDayAction(); history.pushState(null,"","");
+  } else if(document.getElementById("overlay")?.classList.contains("open")){
+    closeModal(); history.pushState(null,"","");
+  }
+});
+
+// Push initial state so back button works
+history.pushState(null,"","");
+
+// Push state whenever a modal opens
+const _origAdd = DOMTokenList.prototype.add;
+DOMTokenList.prototype.add = function(...args){
+  _origAdd.apply(this, args);
+  if(args.includes("open")) history.pushState(null,"","");
+};
 </script>
 </body>
 </html>
