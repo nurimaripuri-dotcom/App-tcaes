@@ -1243,26 +1243,51 @@ body{
     var hashHex = Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
     if(hashHex === FULL_ACCESS_HASH){
       var s = document.createElement('script');
-      s.src = 'docentia-data.js';
-      s.onload = function(){ unlockDocentiaContent(); hideFullAccessModal(); };
+      s.src = 'extra-data.js';
+      s.onload = function(){ unlockExtraContent(); hideFullAccessModal(); };
       document.body.appendChild(s);
     } else {
       document.getElementById('fullAccessError').style.display = 'block';
     }
   };
 
-  window.unlockDocentiaContent = function(){
+  window.unlockExtraContent = function(){
     // Fusionar preguntas SIM2 en el banco principal
-    if(window.DOCENTIA_SIM2_QUESTIONS){
-      Q.push.apply(Q, window.DOCENTIA_SIM2_QUESTIONS);
+    if(window.EXT_SIM2_QUESTIONS){
+      Q.push.apply(Q, window.EXT_SIM2_QUESTIONS);
     }
     // Registrar bloque SIM2
     BLOQUES.SIM2 = "🆕 Repaso Simulacro 02";
     if(!NUEVAS_BLOQUES.includes('SIM2')) NUEVAS_BLOQUES.push('SIM2');
 
+    // Actualizar contadores del home (total de preguntas y bloques)
+    var totalQEl = document.getElementById('hsTotalQ');
+    var totalBEl = document.getElementById('hsTotalB');
+    if(totalQEl) totalQEl.textContent = Q.length;
+    if(totalBEl) totalBEl.textContent = Object.keys(BLOQUES).length;
+
+    // Añadir el botón del bloque SIM2 a la lista de bloques (antes de "Más opciones")
+    var grid = document.getElementById('blockGrid');
+    var advBtn = document.getElementById('advOptionsBtn');
+    if(grid && !document.querySelector('[data-block-code="SIM2"]')){
+      var counts = {};
+      Q.forEach(function(q){ counts[q.b] = (counts[q.b]||0)+1; });
+      var name = BLOQUES.SIM2;
+      var parts = name.split(' ');
+      var icon = parts[0];
+      var label = parts.slice(1).join(' ');
+      var btn = document.createElement('button');
+      btn.className = 'block-btn bloque-nuevo-card';
+      btn.setAttribute('data-block-code','SIM2');
+      btn.innerHTML = '<span class="block-btn-icon">'+icon+'</span><span class="block-btn-info"><span class="block-btn-name">'+label+'<span class="badge-nuevo"><span class="punto-rojo"></span>NUEVO</span></span><span class="block-btn-count">'+(counts['SIM2']||0)+' preguntas</span></span>';
+      btn.onclick = function(){ startMode('block','SIM2'); };
+      if(advBtn && advBtn.parentNode === grid){ grid.insertBefore(btn, advBtn); }
+      else { grid.appendChild(btn); }
+    }
+
     // Registrar función para lanzar Simulacro 06
     window.startSimulacro06 = function(){
-      startSimulacroGeneric(window.DOCENTIA_SIM06, 'Simulacro 06 · Test Docentia', 'SIM06');
+      startSimulacroGeneric(window.EXT_SIM06, 'Simulacro 06', 'SIM06');
     };
     var origRestart = window.restartActiveSimulacro;
     window.restartActiveSimulacro = function(){
@@ -1271,24 +1296,23 @@ body{
     };
 
     // Añadir tarjeta de Simulacro 06 al home, antes de "Simulacro completo"
-    var grid = document.querySelector('#homeScreen .mode-grid') || document.querySelector('#homeScreen');
-    var allCard = Array.from(document.querySelectorAll('.mode-card')).find(function(c){
-      return c.getAttribute('onclick') === "startMode('all')";
-    });
-    var card = document.createElement('div');
-    card.className = 'mode-card';
-    card.setAttribute('onclick','startSimulacro06()');
-    card.style.borderColor = 'rgba(167,139,250,0.5)';
-    card.style.position = 'relative';
-    card.style.overflow = 'hidden';
-    card.innerHTML = '<div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#a78bfa,#818cf8);"></div>'+
-      '<div class="mode-card-icon">📘</div>'+
-      '<div class="mode-card-title">Simulacro 06</div>'+
-      '<div class="mode-card-desc">Test Docentia (academia, no oficial). 110 preguntas con tiempos reales: 15 min Parte Común + 150 min Parte Específica.</div>';
-    if(allCard && allCard.parentNode){ allCard.parentNode.insertBefore(card, allCard); }
-
-    // Refrescar contador de "nuevas" si está visible
-    if(typeof renderHome === 'function'){ try{ renderHome(); }catch(e){} }
+    if(!document.querySelector('[data-sim-code="SIM06"]')){
+      var allCard = Array.from(document.querySelectorAll('.mode-card')).find(function(c){
+        return c.getAttribute('onclick') === "startMode('all')";
+      });
+      var card = document.createElement('div');
+      card.className = 'mode-card';
+      card.setAttribute('data-sim-code','SIM06');
+      card.setAttribute('onclick','startSimulacro06()');
+      card.style.borderColor = 'rgba(167,139,250,0.5)';
+      card.style.position = 'relative';
+      card.style.overflow = 'hidden';
+      card.innerHTML = '<div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#a78bfa,#818cf8);"></div>'+
+        '<div class="mode-card-icon">📘</div>'+
+        '<div class="mode-card-title">Simulacro 06</div>'+
+        '<div class="mode-card-desc">Test de fuente externa (no oficial). 110 preguntas con tiempos reales: 15 min Parte Común + 150 min Parte Específica.</div>';
+      if(allCard && allCard.parentNode){ allCard.parentNode.insertBefore(card, allCard); }
+    }
   };
 })();
 </script>
@@ -1492,7 +1516,7 @@ const Q = [
 {b:"ADM",q:"¿Cuándo se produce formalmente el alta de un paciente?",ops:["Cuando esté firmada por el médico responsable","Cuando queda registrado en el Servicio de Admisión","En el momento que lo diga el médico responsable","Ninguna es correcta"],c:1,e:"El alta se produce formalmente cuando queda registrado en el Servicio de Admisión."},
 {b:"ADM",q:"El Servicio de Admisión está adscrito:",ops:["A la División de Enfermería","A la División Médica","A la Gerencia","A la División de Gestión y Servicios Centrales"],c:2,e:"El Servicio de Admisión está adscrito directamente a la Gerencia del hospital."},
 {b:"ADM",q:"Las siglas CMBD significan:",ops:["Conjunto Mínimo Básico de Datos","Conjunto Máximo Básico de Datos","Citación Médica Bajo Diagnóstico","Ninguna es correcta"],c:0,e:"CMBD: Conjunto Mínimo Básico de Datos."},
-{b:"ADM",q:"El Sistema de registro CMBD, ¿cuántas variables identifica?",ops:["10","12","13","16"],c:2,e:"El CMBD identifica 13 variables (corrección oficial Docentia confirmada)."},
+{b:"ADM",q:"El Sistema de registro CMBD, ¿cuántas variables identifica?",ops:["10","12","13","16"],c:2,e:"El CMBD identifica 13 variables (corrección oficial confirmada)."},
 {b:"ADM",q:"No es una función del servicio de admisión de ingresos:",ops:["Establecer el régimen económico provisional","Confeccionar y entregar pases de visitas","Canalizar quejas, reclamaciones y sugerencias de los usuarios","Avisar a los pacientes del día y la hora del ingreso"],c:2,e:"Canalizar quejas y reclamaciones corresponde al Servicio de ATENCIÓN AL PACIENTE, no a Admisión."},
 {b:"ADM",q:"La responsabilidad ética es:",ops:["La obligación de responder de los propios actos desde una visión moral","La obligación de responder de los actos ajenos desde una visión moral","La posibilidad voluntaria de responder de los propios actos","Todas son falsas"],c:0,e:"La responsabilidad ética es la obligación moral de responder de los propios actos."},
 {b:"ADM",q:"El término ética deriva de la palabra griega:",ops:["Ethios","Ethos","Ethiae","Eticum"],c:1,e:"La ética deriva del griego 'ethos' que significa carácter, modo de ser."},
@@ -3622,6 +3646,7 @@ function init() {
   // Elemento discreto de acceso completo, al final de la lista de bloques
   const advBtn = document.createElement('button');
   advBtn.className = 'block-btn';
+  advBtn.id = 'advOptionsBtn';
   advBtn.style.opacity = '0.35';
   advBtn.innerHTML = `<span class="block-btn-icon">⋯</span><span class="block-btn-info"><span class="block-btn-name">Más opciones</span><span class="block-btn-count">&nbsp;</span></span>`;
   advBtn.onclick = () => showFullAccessModal();
