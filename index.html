@@ -1242,6 +1242,7 @@ body{
     var buf = await crypto.subtle.digest('SHA-256', enc);
     var hashHex = Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
     if(hashHex === FULL_ACCESS_HASH){
+      try { localStorage.setItem('full_access_ok','1'); } catch(e){}
       var s = document.createElement('script');
       s.src = 'extra-data.js';
       s.onload = function(){ unlockExtraContent(); hideFullAccessModal(); };
@@ -3651,6 +3652,16 @@ function init() {
   advBtn.innerHTML = `<span class="block-btn-icon">⋯</span><span class="block-btn-info"><span class="block-btn-name">Más opciones</span><span class="block-btn-count">&nbsp;</span></span>`;
   advBtn.onclick = () => showFullAccessModal();
   grid.appendChild(advBtn);
+
+  // Si este dispositivo ya desbloqueó el contenido completo antes, restaurarlo automáticamente
+  try {
+    if(localStorage.getItem('full_access_ok') === '1'){
+      const s = document.createElement('script');
+      s.src = 'extra-data.js';
+      s.onload = function(){ if(typeof unlockExtraContent === 'function') unlockExtraContent(); };
+      document.body.appendChild(s);
+    }
+  } catch(e){}
 
 }
 
