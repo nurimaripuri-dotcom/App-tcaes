@@ -1033,59 +1033,16 @@ body{
 </head>
 <body>
 
-<!-- AVISO LEGAL -->
-<div id="legalScreen" style="position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:#05080f;padding:24px;">
-  <div style="width:100%;max-width:420px;">
-    <div style="font-family:'Fraunces',serif;font-size:1.4rem;color:#e8eaf0;margin-bottom:14px;text-align:center;">Antes de empezar</div>
-    <div style="color:#c3c9d6;font-size:0.88rem;line-height:1.55;background:#0c1220;border:1px solid #2a3142;border-radius:12px;padding:16px;max-height:42vh;overflow-y:auto;margin-bottom:16px;">
-      Esta app es un recopilatorio de estudio de carácter personal y no oficial, pensado para practicar de cara a la oposición. No sustituye al temario oficial ni a las fuentes legales/normativas correspondientes.<br><br>
-      Te animamos a ampliarla: si quieres añadir más preguntas, bloques o test propios, adelante. Al usar y/o modificar este contenido, aceptas que:<br>
-      &nbsp;• Lo haces de forma voluntaria y bajo tu propia responsabilidad.<br>
-      &nbsp;• Cualquier contenido que añadas, copies o redistribuyas es responsabilidad exclusiva tuya, incluido el respeto a los derechos de propiedad intelectual de terceros.<br>
-      &nbsp;• La persona que ha compartido este enlace queda exonerada de cualquier responsabilidad derivada del uso que hagas de la app o de los contenidos que incorpores.<br><br>
-      Si no estás de acuerdo, no continúes.
-    </div>
-    <label style="display:flex;align-items:flex-start;gap:8px;color:#9aa3b5;font-size:0.85rem;margin-bottom:16px;cursor:pointer;">
-      <input type="checkbox" id="legalCheck" style="margin-top:3px;">
-      <span>He leído y acepto las condiciones anteriores bajo mi propia responsabilidad.</span>
-    </label>
-    <button id="legalBtn" onclick="acceptLegal()" disabled style="width:100%;padding:12px;border-radius:10px;border:none;background:#3a4155;color:#8a90a0;font-weight:600;font-size:1rem;cursor:not-allowed;transition:background .2s,color .2s;">Continuar</button>
-  </div>
-</div>
-<script>
-(function(){
-  var cb = document.getElementById('legalCheck');
-  var btn = document.getElementById('legalBtn');
-  cb.addEventListener('change', function(){
-    if(cb.checked){
-      btn.disabled = false;
-      btn.style.background = '#a78bfa';
-      btn.style.color = '#0c1220';
-      btn.style.cursor = 'pointer';
-    } else {
-      btn.disabled = true;
-      btn.style.background = '#3a4155';
-      btn.style.color = '#8a90a0';
-      btn.style.cursor = 'not-allowed';
-    }
-  });
-  var legalStored = null;
-  try { legalStored = sessionStorage.getItem('legal_ok_pub'); } catch(e){}
-  if(legalStored === '1'){ document.getElementById('legalScreen').style.display = 'none'; }
-  window.acceptLegal = function(){
-    if(!cb.checked) return;
-    try { sessionStorage.setItem('legal_ok_pub','1'); } catch(e){}
-    document.getElementById('legalScreen').style.display = 'none';
-  };
-})();
-</script>
-
 <!-- HOME -->
 <div class="home" id="homeScreen">
   <div class="logo-area">
     <div class="logo-badge">TCAE</div>
     <div style="font-family:'Fraunces',serif;font-size:clamp(1rem,3vw,1.4rem);color:var(--muted2);margin-top:4px;">Simulacro · Oposición SERGAS</div>
     <div class="logo-sub">2025</div>
+  </div>
+
+  <div id="examCountdownBanner" style="margin:0 auto 18px;max-width:420px;text-align:center;padding:10px 16px;border-radius:12px;background:linear-gradient(90deg,rgba(239,68,68,0.15),rgba(251,191,36,0.15));border:1px solid rgba(251,191,36,0.4);font-family:'Fraunces',serif;">
+    <span id="examCountdownText" style="font-size:0.95rem;color:var(--muted2, #ccc);">Calculando días restantes…</span>
   </div>
 
   <div class="home-stats">
@@ -1109,7 +1066,7 @@ body{
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#ef4444,#dc2626);"></div>
       <div class="mode-card-icon">🆕</div>
       <div class="mode-card-title">Últimas preguntas <span class="badge-nuevo" style="font-size:10px;padding:2px 6px;"><span class="punto-rojo"></span>NUEVO</span></div>
-      <div class="mode-card-desc" id="nuevasCardDesc">Preguntas añadidas recientemente, incluyendo las 100 preguntas TCAE 2024, además de los bloques incorporados recientemente.</div>
+      <div class="mode-card-desc" id="nuevasCardDesc">Preguntas de los bloques añadidos recientemente: Higiene, Nutrición, Farmacología, Aislamientos, Simulacro 02, Examen OPE 2014/2015 y más.</div>
     </div>
     <div class="mode-card" onclick="startSimulacro01()" style="border-color:rgba(251,191,36,0.5);position:relative;overflow:hidden;">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#fbbf24,#f59e0b);"></div>
@@ -1141,6 +1098,12 @@ body{
       <div class="mode-card-title">Simulacro 05 <span class="badge-nuevo" style="font-size:10px;padding:2px 8px;"><span class="punto-rojo"></span>NUEVO</span></div>
       <div class="mode-card-desc">Examen OFICIAL real: OPE SERGAS 2014/2015. 110 preguntas con la plantilla de respuestas definitiva del Servizo Galego de Saúde.</div>
     </div>
+    <div class="mode-card" onclick="startSimulacro06()" style="border-color:rgba(167,139,250,0.5);position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#a78bfa,#818cf8);"></div>
+      <div class="mode-card-icon">📘</div>
+      <div class="mode-card-title">Simulacro 06 <span class="badge-nuevo" style="font-size:10px;padding:2px 8px;"><span class="punto-rojo"></span>NUEVO</span></div>
+      <div class="mode-card-desc">Test Docentia (academia, no oficial). 110 preguntas con tiempos reales: 15 min Parte Común + 150 min Parte Específica.</div>
+    </div>
     <div class="mode-card" onclick="startMode('all')">
       <div class="mode-card-icon">🎯</div>
       <div class="mode-card-title">Simulacro completo</div>
@@ -1161,162 +1124,6 @@ body{
   <div class="section-title" id="blockLabel" style="display:none">Elige un bloque</div>
   <div class="block-grid" id="blockGrid" style="display:none"></div>
 </div>
-
-<!-- MODAL ACCESO COMPLETO -->
-<div id="fullAccessModal" style="display:none;position:fixed;inset:0;z-index:9998;align-items:center;justify-content:center;background:rgba(5,8,15,0.85);padding:24px;">
-  <div style="width:100%;max-width:340px;background:#0c1220;border:1px solid #2a3142;border-radius:14px;padding:22px;text-align:center;">
-
-    <!-- Paso 1: responsabilidad -->
-    <div id="faStep1">
-      <div style="font-family:'Fraunces',serif;font-size:1.15rem;color:#e8eaf0;margin-bottom:10px;">Contenido adicional restringido</div>
-      <div style="color:#c3c9d6;font-size:0.82rem;line-height:1.5;text-align:left;background:#05080f;border:1px solid #2a3142;border-radius:10px;padding:12px;margin-bottom:14px;">
-        Este contenido incluye material de terceros (academia) no autorizado para redistribución. Si continúas:<br><br>
-        &nbsp;• Accedes de forma voluntaria y bajo tu propia responsabilidad.<br>
-        &nbsp;• Te comprometes a no copiar, distribuir ni compartir este contenido con nadie.<br>
-        &nbsp;• Asumes cualquier consecuencia derivada de su uso, exonerando a quien te dio acceso.
-      </div>
-      <label style="display:flex;align-items:flex-start;gap:8px;color:#9aa3b5;font-size:0.8rem;margin-bottom:14px;cursor:pointer;text-align:left;">
-        <input type="checkbox" id="faRespCheck" style="margin-top:3px;">
-        <span>Acepto y me hago responsable.</span>
-      </label>
-      <button id="faContinueBtn" disabled onclick="faGoToStep2()" style="width:100%;padding:11px;border-radius:9px;border:none;background:#3a4155;color:#8a90a0;font-weight:600;font-size:0.9rem;cursor:not-allowed;margin-bottom:8px;">Continuar</button>
-      <div onclick="hideFullAccessModal()" style="color:#6a7285;font-size:0.8rem;cursor:pointer;">Cancelar</div>
-    </div>
-
-    <!-- Paso 2: contraseña -->
-    <div id="faStep2" style="display:none;">
-      <div style="font-family:'Fraunces',serif;font-size:1.2rem;color:#e8eaf0;margin-bottom:6px;">Acceso completo</div>
-      <div style="color:#9aa3b5;font-size:0.85rem;margin-bottom:16px;">Introduce la contraseña</div>
-      <input type="password" id="fullAccessPass" placeholder="Contraseña" style="width:100%;padding:11px 13px;border-radius:9px;border:1px solid #2a3142;background:#05080f;color:#e8eaf0;font-size:0.95rem;margin-bottom:10px;box-sizing:border-box;" onkeydown="if(event.key==='Enter')checkFullAccess()">
-      <button onclick="checkFullAccess()" style="width:100%;padding:11px;border-radius:9px;border:none;background:#a78bfa;color:#0c1220;font-weight:600;font-size:0.95rem;cursor:pointer;margin-bottom:8px;">Desbloquear</button>
-      <div onclick="hideFullAccessModal()" style="color:#6a7285;font-size:0.8rem;cursor:pointer;margin-top:4px;">Cancelar</div>
-      <div id="fullAccessError" style="color:#fb7185;font-size:0.8rem;margin-top:10px;display:none;">Contraseña incorrecta</div>
-    </div>
-
-  </div>
-</div>
-<script>
-(function(){
-  var FULL_ACCESS_HASH = "5c3f9a3c095a2c730c4f5db1b56c8d414abccdc083b458538435de2bd450bdf8";
-
-  var respCb = document.getElementById('faRespCheck');
-  var contBtn = document.getElementById('faContinueBtn');
-  respCb.addEventListener('change', function(){
-    if(respCb.checked){
-      contBtn.disabled = false;
-      contBtn.style.background = '#a78bfa';
-      contBtn.style.color = '#0c1220';
-      contBtn.style.cursor = 'pointer';
-    } else {
-      contBtn.disabled = true;
-      contBtn.style.background = '#3a4155';
-      contBtn.style.color = '#8a90a0';
-      contBtn.style.cursor = 'not-allowed';
-    }
-  });
-
-  window.showFullAccessModal = function(){
-    document.getElementById('fullAccessModal').style.display = 'flex';
-    document.getElementById('faStep1').style.display = 'block';
-    document.getElementById('faStep2').style.display = 'none';
-  };
-  window.hideFullAccessModal = function(){
-    document.getElementById('fullAccessModal').style.display = 'none';
-    document.getElementById('fullAccessError').style.display = 'none';
-    document.getElementById('fullAccessPass').value = '';
-    respCb.checked = false;
-    contBtn.disabled = true;
-    contBtn.style.background = '#3a4155';
-    contBtn.style.color = '#8a90a0';
-    contBtn.style.cursor = 'not-allowed';
-  };
-  window.faGoToStep2 = function(){
-    if(!respCb.checked) return;
-    document.getElementById('faStep1').style.display = 'none';
-    document.getElementById('faStep2').style.display = 'block';
-  };
-
-  window.checkFullAccess = async function(){
-    var val = document.getElementById('fullAccessPass').value;
-    var enc = new TextEncoder().encode(val);
-    var buf = await crypto.subtle.digest('SHA-256', enc);
-    var hashHex = Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-    if(hashHex === FULL_ACCESS_HASH){
-      try { localStorage.setItem('full_access_ok','1'); } catch(e){}
-      var s = document.createElement('script');
-      s.src = 'extra-data.js';
-      s.onload = function(){ unlockExtraContent(); hideFullAccessModal(); };
-      document.body.appendChild(s);
-    } else {
-      document.getElementById('fullAccessError').style.display = 'block';
-    }
-  };
-
-  window.unlockExtraContent = function(){
-    // Fusionar preguntas SIM2 en el banco principal
-    if(window.EXT_SIM2_QUESTIONS){
-      Q.push.apply(Q, window.EXT_SIM2_QUESTIONS);
-    }
-    // Registrar bloque SIM2
-    BLOQUES.SIM2 = "🆕 Repaso Simulacro 02";
-    if(!NUEVAS_BLOQUES.includes('SIM2')) NUEVAS_BLOQUES.push('SIM2');
-
-    // Actualizar contadores del home (total de preguntas y bloques)
-    var totalQEl = document.getElementById('hsTotalQ');
-    var totalBEl = document.getElementById('hsTotalB');
-    if(totalQEl) totalQEl.textContent = Q.length;
-    if(totalBEl) totalBEl.textContent = Object.keys(BLOQUES).length;
-
-    // Añadir el botón del bloque SIM2 a la lista de bloques (antes de "Más opciones")
-    var grid = document.getElementById('blockGrid');
-    var advBtn = document.getElementById('advOptionsBtn');
-    if(grid && !document.querySelector('[data-block-code="SIM2"]')){
-      var counts = {};
-      Q.forEach(function(q){ counts[q.b] = (counts[q.b]||0)+1; });
-      var name = BLOQUES.SIM2;
-      var parts = name.split(' ');
-      var icon = parts[0];
-      var label = parts.slice(1).join(' ');
-      var btn = document.createElement('button');
-      btn.className = 'block-btn bloque-nuevo-card';
-      btn.setAttribute('data-block-code','SIM2');
-      btn.innerHTML = '<span class="block-btn-icon">'+icon+'</span><span class="block-btn-info"><span class="block-btn-name">'+label+'<span class="badge-nuevo"><span class="punto-rojo"></span>NUEVO</span></span><span class="block-btn-count">'+(counts['SIM2']||0)+' preguntas</span></span>';
-      btn.onclick = function(){ startMode('block','SIM2'); };
-      if(advBtn && advBtn.parentNode === grid){ grid.insertBefore(btn, advBtn); }
-      else { grid.appendChild(btn); }
-    }
-
-    // Registrar función para lanzar Simulacro 06
-    window.startSimulacro06 = function(){
-      startSimulacroGeneric(window.EXT_SIM06, 'Simulacro 06', 'SIM06');
-    };
-    var origRestart = window.restartActiveSimulacro;
-    window.restartActiveSimulacro = function(){
-      if(ACTIVE_SIM_KEY === 'SIM06') startSimulacro06();
-      else origRestart();
-    };
-
-    // Añadir tarjeta de Simulacro 06 al home, antes de "Simulacro completo"
-    if(!document.querySelector('[data-sim-code="SIM06"]')){
-      var allCard = Array.from(document.querySelectorAll('.mode-card')).find(function(c){
-        return c.getAttribute('onclick') === "startMode('all')";
-      });
-      var card = document.createElement('div');
-      card.className = 'mode-card';
-      card.setAttribute('data-sim-code','SIM06');
-      card.setAttribute('onclick','startSimulacro06()');
-      card.style.borderColor = 'rgba(167,139,250,0.5)';
-      card.style.position = 'relative';
-      card.style.overflow = 'hidden';
-      card.innerHTML = '<div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#a78bfa,#818cf8);"></div>'+
-        '<div class="mode-card-icon">📘</div>'+
-        '<div class="mode-card-title">Simulacro 06</div>'+
-        '<div class="mode-card-desc">Test de fuente externa (no oficial). 110 preguntas con tiempos reales: 15 min Parte Común + 150 min Parte Específica.</div>';
-      if(allCard && allCard.parentNode){ allCard.parentNode.insertBefore(card, allCard); }
-    }
-  };
-})();
-</script>
 
 <!-- QUIZ -->
 <div class="quiz-screen" id="quizScreen">
@@ -1463,12 +1270,12 @@ const BLOQUES = {
   GER:"👴 Geriatría / Envejecimiento",
   GEN:"♀️ Igualdad / Violencia de Género",
   OPE:"🏆 Exámenes Reales OPE SERGAS",
-  HIST:"📜 Examen Oficial OPE 2014/2015 Completo",
-  INF:"💻 Informática Básica / Sistemas SERGAS"
+  SIM2:"🆕 Repaso Simulacro 02",
+  HIST:"📜 Examen Oficial OPE 2014/2015 Completo"
 };
 
 // Bloques que se muestran en el modo "Últimas preguntas"
-const NUEVAS_BLOQUES = ['HIG','UNI','EXP','NUT','FAR','AIS','DES','HIST','INF'];
+const NUEVAS_BLOQUES = ['HIG','UNI','EXP','NUT','FAR','AIS','DES','SIM2','HIST'];
 
 const Q = [
 // ===== PRL =====
@@ -1517,7 +1324,7 @@ const Q = [
 {b:"ADM",q:"¿Cuándo se produce formalmente el alta de un paciente?",ops:["Cuando esté firmada por el médico responsable","Cuando queda registrado en el Servicio de Admisión","En el momento que lo diga el médico responsable","Ninguna es correcta"],c:1,e:"El alta se produce formalmente cuando queda registrado en el Servicio de Admisión."},
 {b:"ADM",q:"El Servicio de Admisión está adscrito:",ops:["A la División de Enfermería","A la División Médica","A la Gerencia","A la División de Gestión y Servicios Centrales"],c:2,e:"El Servicio de Admisión está adscrito directamente a la Gerencia del hospital."},
 {b:"ADM",q:"Las siglas CMBD significan:",ops:["Conjunto Mínimo Básico de Datos","Conjunto Máximo Básico de Datos","Citación Médica Bajo Diagnóstico","Ninguna es correcta"],c:0,e:"CMBD: Conjunto Mínimo Básico de Datos."},
-{b:"ADM",q:"El Sistema de registro CMBD, ¿cuántas variables identifica?",ops:["10","12","13","16"],c:2,e:"El CMBD identifica 13 variables (corrección oficial confirmada)."},
+{b:"ADM",q:"El Sistema de registro CMBD, ¿cuántas variables identifica?",ops:["10","12","13","16"],c:2,e:"El CMBD identifica 13 variables (corrección oficial Docentia confirmada)."},
 {b:"ADM",q:"No es una función del servicio de admisión de ingresos:",ops:["Establecer el régimen económico provisional","Confeccionar y entregar pases de visitas","Canalizar quejas, reclamaciones y sugerencias de los usuarios","Avisar a los pacientes del día y la hora del ingreso"],c:2,e:"Canalizar quejas y reclamaciones corresponde al Servicio de ATENCIÓN AL PACIENTE, no a Admisión."},
 {b:"ADM",q:"La responsabilidad ética es:",ops:["La obligación de responder de los propios actos desde una visión moral","La obligación de responder de los actos ajenos desde una visión moral","La posibilidad voluntaria de responder de los propios actos","Todas son falsas"],c:0,e:"La responsabilidad ética es la obligación moral de responder de los propios actos."},
 {b:"ADM",q:"El término ética deriva de la palabra griega:",ops:["Ethios","Ethos","Ethiae","Eticum"],c:1,e:"La ética deriva del griego 'ethos' que significa carácter, modo de ser."},
@@ -3464,6 +3271,124 @@ const Q = [
 {b:"DES",q:"¿Cómo se denomina la sustancia germicida que, al ser de baja toxicidad, puede aplicarse sobre la piel y tejidos vivos?",ops:["Desinfectantes.","Detergentes.","Antisépticos.","Todas las respuestas son correctas."],c:2,e:"Los antisépticos son germicidas de baja toxicidad que pueden aplicarse sobre tejidos vivos (piel, mucosas, heridas)."},
 
 // ===== SIM2 (repaso Simulacro 02) =====
+{b:"SIM2",q:"Según el artículo 10 de la Constitución Española, ¿qué es la dignidad de la persona?:",ops:["Fundamento del orden político y de la paz social.","Fundamento del orden jurídico y de la paz social.","Fundamento del orden público y de la paz social.","Ninguna de las anteriores es correcta."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"¿Cuál de las siguientes normas es el Estatuto de Autonomía de Galicia?:",ops:["Ley Orgánica 1/1980, de 6 de junio, de Estatuto de Autonomía de Galicia.","Ley Orgánica 1/1981, de 6 de junio, de Estatuto de Autonomía de Galicia.","Ley Orgánica 1/1980, de 6 de abril, de Estatuto de Autonomía de Galicia.","Ley Orgánica 1/1981, de 6 de abril, de Estatuto de Autonomía de Galicia."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"La Ley 14/1986, de 25 de abril, General de Sanidad, establece como una obligación de los ciudadanos con las instituciones y organismos del sistema sanitario:",ops:["Utilizar las vías de reclamación y de propuesta de sugerencias en los plazos previstos.","Participar, a través de las instituciones comunitarias, en las actividades sanitarias, en los términos establecidos en esta Ley y en las disposiciones que la desarrollen.","A la confidencialidad de toda la información relacionada con su proceso y con su estancia en instituciones sanitarias públicas y privadas que colaboren con el sistema público.","Ninguna de las anteriores es una obligación de los ciudadanos con las instituciones y organismos del sistema sanitario."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"Según la Ley 8/2008, de salud de Galicia, el Servicio Gallego de Salud:",ops:["Es un organismo autónomo sin personalidad jurídica.","No es un organismo autónomo, pero tiene personalidad jurídica.","Es un organismo autónomo con personalidad jurídica.","No es un organismo autónomo y no tiene personalidad jurídica."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"De conformidad con la Ley 55/2003, de 16 de diciembre, del Estatuto Marco, ¿cuál de los siguientes complementos está destinado a retribuir el nivel del puesto que se desempeña?:",ops:["Complemento de carrera.","Complemento de productividad.","Complemento específico.","Ninguna de las anteriores es correcta."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"Los aspirantes que hayan superado el proceso selectivo disponen de un plazo para incorporarse al destino adjudicado, cuyo cómputo se inicia al día siguiente a la publicación de la resolución del nombramiento en el Diario Oficial de Galicia. Este plazo está establecido en el Decreto 206/2005 de provisión de plazas de personal estatutario en:",ops:["30 días hábiles.","30 días naturales.","1 mes.","Ninguna de las anteriores es correcta."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"De conformidad con el artículo 26 del Decreto 206/2005, del 22 de julio, en el Servicio Gallego de Salud, para acceder a los procesos de selección fija por el turno de promoción interna, las personas aspirantes deben tener nombramiento como personal estatutario fijo:",ops:["Durante, al menos, un año en la categoría de procedencia.","Durante, al menos, dos años en la categoría de procedencia.","Durante, al menos, tres años en la categoría de procedencia.","No se exige la acreditación de ningún período previo de permanencia como personal estatutario fijo en la categoría de procedencia."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"Según la Ley gallega 3/2001, de 28 de mayo, reguladora del consentimiento informado y de la historia clínica de los pacientes, la historia clínica deberá ser única por paciente:",ops:["En el Servicio Gallego de Salud.","En todo o Sistema Nacional de Salud.","Al menos en cada complejo hospitalario, hospital o centro sanitario.","En el centro de salud."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"De conformidad con la Ley 3/2001, reguladora del consentimiento informado y de la historia clínica de los pacientes, en el consentimiento por sustitución, en el caso de los familiares, se dará preferencia, en caso de que existan:",ops:["Padres.","Al cónyuge o pareja de hecho.","Descendientes mayores de edad.","Familiares de primer grado por consanguinidad."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"A los efectos de la Ley 11/2007, del 27 de julio, gallega para la prevención y el tratamiento integral de la violencia de género, la situación de violencia se acreditará mediante:",ops:["Sentencia de cualquier orden jurisdiccional que declare que la mujer sufrió violencia en cualquiera de las modalidades definidas en la ley.","Certificación o informe de los servicios sociales y/o sanitarios de la Administración pública autonómica o local.","Certificación de los servicios de acogida de la Administración pública autonómica o local.","Todas las respuestas anteriores son correctas."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"Entre los principios de la acción preventiva que establece el artículo 15 de la Ley 31/1995 de Prevención de Riesgos Laborales, no se recoge el siguiente:",ops:["Tener en cuenta la evolución de la técnica.","Sustituir lo peligroso por lo que entrañe poco o ningún peligro.","Adoptar medidas que antepongan la protección individual a la colectiva.","Dar las debidas instrucciones a los trabajadores."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"¿Cuál de las siguientes opciones NO garantiza el art. 9.3 de la Constitución?:",ops:["La responsabilidad de los poderes públicos.","La interdicción de la arbitrariedad de los poderes públicos.","La retroactividad de las disposiciones sancionadoras no favorables.","La jerarquía normativa."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"¿Cuál de las siguientes NO es función del servicio de admisión y atención al usuario?:",ops:["Gestionar los ingresos de los pacientes.","Establecer la oferta adecuada de camas.","Custodiar las pertenencias de los pacientes ingresados.","Realizar encuestas post-hospitalización."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"En cuál de los siguientes casos el consentimiento informado puede ser verbal de acuerdo con el art. 8 de la Ley 41/2002?:",ops:["Intervención quirúrgica.","Quimioterapia.","Extracción de sangre.","En ninguna de las anteriores el consentimiento puede ser verbal."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"Las mujeres presentan una respuesta inmunitaria:",ops:["Más débil frente a infecciones.","Igual que la masculina.","Más robusta.","Inexistente en enfermedades autoinmunes."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"¿A qué mujeres se aplica el cuestionario WAST?:",ops:["Exclusivamente embarazadas.","Mujeres mayores de 65 años.","Mujeres de 15 años o más.","Solo víctimas con denuncia previa."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"Dentro de la preparación inmediata del paciente quirúrgico NO encontramos:",ops:["Dieta absoluta o ayunas, desde al menos 8-10 horas antes de la intervención.","Atención a la nutrición e hidratación: el aporte adecuado favorece el restablecimiento.","Retirada de objetos de su cuerpo: como prótesis y joyas.","Recogida y registro de constantes vitales."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"Según la OMS, ¿cuánto tiempo hay que dedicar a la higiene de manos con un Preparado de Base Alcohólica (PBA) para que sea efectivo?:",ops:["10 a 15 segundos.","20 a 30 segundos.","40 a 50 segundos.","60 segundos."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"Señale la opción incorrecta respecto a la obtención de muestras de orina en bolsas estériles de poliuretano en lactantes o niños pequeños:",ops:["Se aplican con un adhesivo después de lavar las zonas genital y perineal.","Son útiles en niños hasta 2-3 años de edad.","Se pueden mantener hasta 4 horas; después de ese tiempo, se deben cambiar.","Es muy frecuente su contaminación."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"Los restos anatómicos humanos de escasa entidad, procedentes de actividades sanitarias pertenecen a:",ops:["Residuos sanitarios no peligrosos clase IIa.","Residuos sanitarios peligrosos clase IIb.","Residuos sanitarios peligrosos clase III.","Residuos sanitarios peligrosos clase IV."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"Cuando bajamos una rampa con un paciente en silla de ruedas lo haremos:",ops:["El paciente debe ir siempre por delante.","La persona que realiza el transporte lo hace de cara a la pendiente.","La persona que realiza el transporte baja por delante del paciente.","No es necesario sujetar a ningún paciente."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"¿En qué posición está un paciente tumbado en decúbito supino con la cabeza colgando?:",ops:["Sims.","Trendelemburg.","Roser.","Morestin."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"Cuando hablamos de una desinfección que es efectiva frente a virus lipídicos de tamaño medio, virus no lipídicos pequeños, bacterias en su forma vegetativa, bacilo de Koch, esporas (en determinadas circunstancias) y hongos, nos referimos a:",ops:["Desinfección de bajo nivel.","Desinfección de nivel intermedio.","Desinfección de alto nivel.","Esterilización."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"¿Qué significado tiene el término oliguria en adultos?:",ops:["Volumen de orina superior a 2500cc en 24 horas.","Volumen de orina superior a 1500cc en 24 horas.","Volumen de orina inferior a 400cc en 24 horas.","Falta total de eliminación de orina."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"En la posición de Fowler alta, ¿la cabecera de la cama está elevada con qué ángulo con respecto a los pies? Señale la respuesta correcta:",ops:["120º.","90º.","60º.","30º."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"Señale cuál de las siguientes considera que es una actuación adecuada de una TCAE ante un residente en una residencia de mayores:",ops:["Dejar que permanezca en la misma posición si no se queja.","Cambiar de posición al residente cada 2 horas para prevenir úlceras.","Administrar analgésicos si presenta dolor.","Diagnosticar una úlcera por presión si aparece enrojecimiento en la piel."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"¿Cuál de las siguientes no es característica de la fase maníaca en el trastorno bipolar?:",ops:["Euforia.","Fuga de ideas.","Apatía.","Distraibilidad."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"¿De qué color sería el tapón de un tubo de extracción sanguínea utilizado para estudios de coagulación?:",ops:["Tapón azul claro.","Tapón violeta.","Tapón negro de dos elementos.","Tapón rojo."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"En la clasificación de la cirugía, según la finalidad general, ¿qué tipo de cirugía de las siguientes NO está incluida? Señale la respuesta correcta:",ops:["Cirugía diagnóstica.","Cirugía urgente.","Cirugía ablativa o curativa.","Cirugía paliativa."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"El concepto de “capacidad del organismo para soportar dosis cada vez más elevadas de una droga en el uso continuo de la misma” corresponde a:",ops:["Compulsión.","Tolerancia.","Dependencia.","Síndrome de abstinencia."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"Indique cuál de las siguientes afirmaciones sobre la recogida de líquido cefalorraquídeo es correcta:",ops:["Se realiza con el paciente sedado.","Se coloca al paciente decúbito lateral, al borde de la cama y con la espalda arqueada.","El lugar de punción es entre las vértebras cervicales, siendo la más frecuente.","Es una técnica no estéril."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"El movimiento de separación del miembro inferior derecho del plano medio sagital se conoce como movimiento de:",ops:["Abducción.","Aducción.","Rotación.","Flexión."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"Dentro de la recogida de datos, señale cuál de las siguientes fuentes no nos resulta válida para identificar las necesidades del paciente:",ops:["Entrevista.","Taxonomía NANDA.","Cuestionario.","Observación directa."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"Va usted a entrar a una habitación de un paciente aislado, ¿Cuál es el último EPI que se coloca?:",ops:["Los guantes.","La bata.","Las calzas.","La mascarilla."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"Señale cuál de las siguientes manifestaciones no se presenta en una crisis de angustia:",ops:["Falta de respiración.","Taquicardia.","Agitación y temblores.","Bradicardia."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"¿En qué posición se colocará al paciente para la realización del aseo?:",ops:["En decúbito lateral, si no existe contraindicación.","En decúbito supino, si no existe contraindicación.","En posición de Fowler.","En posición de Sims."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"Al conjunto formado por el espacio de la habitación, el mobiliario y los materiales que se utiliza durante el tiempo que la persona esté hospitalizada se denomina:",ops:["Sala de enfermería.","Unidad de hospitalización.","Unidad del paciente.","Unidad de enfermería."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"El técnico en cuidados auxiliares de enfermería interviene con frecuencia en el proceso de obtención de muestras biológicas. Señale la respuesta correcta en relación con un paciente hospitalizado:",ops:["Prepara al paciente y todo el material necesario.","Ayuda durante el procedimiento de obtención de la muestra, recogiendo todo el material.","Garantiza la correcta identificación de la muestra, el volante de solicitud de analítica y prepara el transporte en las mejores condiciones.","Todas son ciertas."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"Según Marc Lalonde, dentro de los determinantes de salud, el más influyente es:",ops:["Sistema sanitario.","Biología humana.","Medio ambiente.","Estilo de vida."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"Con respecto a las movilizaciones activas, es correcto:",ops:["Son las realizadas por un terapeuta sobre los distintos segmentos corporales.","Son aquellas realizadas por el propio paciente, bajo la supervisión de un profesional.","Son las realizadas con una silla de ruedas.","Son las que se realizan con dispositivos de apoyo especiales."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"Señale la opción correcta acerca de las características normales de un esputo:",ops:["Acuoso y claro.","Mucoso.","Sanguinolento.","Purulento."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"En el proceso de esterilización por autoclave, ¿qué temperatura se necesita? Señale la respuesta correcta:",ops:["93º C.","120º C.","90º C.","80º C."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"La punción lumbar para la obtención de líquido cefalorraquídeo se realizará en:",ops:["Vértebras dorsales D3-D4.","Vértebras lumbares: L3-L4 o L4-L5.","Vértebras dorsales: D9-D10.","Vértebras lumbares: L1-L2."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"Entre los inconvenientes que presenta la esterilización en autoclave, destaca el que:",ops:["Deja residuos.","Contamina.","Es lenta.","Deteriora los materiales de plástico."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"Según el EPINE 2025 ¿Cuál es el servicio hospitalario con una mayor tasa de IRAS?:",ops:["Neumología.","UCI.","Reanimación postquirúrgica.","Medicina Interna."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"Cuando hablamos de “colecisto” nos estamos refiriendo a:",ops:["Colon ascendente.","Vesícula.","Colon descendente.","Colon transverso."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"¿De qué tipo de diagnóstico estamos hablando en el Proceso de Atención de Enfermería, si se define una situación que está presente y, por tanto, puede ser validada por la presencia de signos y síntomas? Señale la respuesta correcta:",ops:["Diagnóstico real.","Diagnóstico potencial.","Diagnóstico de bienestar.","Diagnóstico particular."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"Indique que EPI (Equipo de Protección Individual) está indicado en el personal sanitario que vaya a estar en contacto con paciente en investigación o confirmados de enfermedades de infección respiratoria de alto riesgo, señale la respuesta INCORRECTA:",ops:["Guantes.","Mascarilla FFP1.","Bata desechable impermeable de manga larga.","Protección ocular ajustada de montura integral o protector facial completo."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"El número de casos de una enfermedad en un momento determinado en relación con la población de ese momento es:",ops:["Tasa de morbilidad.","Tasa de incidencia.","Tasa de prevalencia.","Tasa de morbimortalidad."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"Dentro de los cuidados de un paciente conectado a un respirador se evitará:",ops:["Realizar la higiene diaria del paciente.","Prevenir las úlceras por presión.","Movilizaciones bruscas del paciente.","Ninguna es correcta."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"¿Cuál de los siguientes no es un eslabón de la cadena epidemiológica?:",ops:["Ciclo reproductivo.","Fuente de infección.","Reservorio.","Mecanismo de transmisión."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"La idea principal sobre el objetivo de la enfermería de colocar al paciente en las mejores condiciones posibles para que la naturaleza actúe sobre él, corresponde a:",ops:["Virginia Herdenson.","Florence Nightingale.","D. Johnson, King y B. Newman.","Callista Roy."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"¿Qué posición no está recomendada para la realización de la Punción Lumbar? Señale la respuesta correcta:",ops:["Decúbito lateral derecho.","Sentado el paciente con la cabeza inclinada sobre las piernas.","Decúbito lateral izquierdo.","Posición de Morestin."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"Una infección nosocomial se define como:",ops:["Infección que afecta a un paciente durante el proceso de asistencia en un hospital u otro centro sanitario, que no estaba presente ni incubándose en el momento del ingreso.","Infecciones que se contraen en el hospital, pero se manifiestan después del alta.","Infecciones ocupacionales del personal del centro sanitario.","Todas las respuestas son correctas."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"La anestesia que se administra inyectando en el espacio subaracnoideo, se llama:",ops:["Epidural.","Espinal o raquídea.","Regional.","Troncular."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"Tomando como referencia la Guía de la higiene de manos en centros sanitarios del CDC (Centre for Disease Control), con respecto a la higiene de manos es cierto que la longitud de las uñas no debe sobrepasar los…:",ops:["0,6 cm.","0,8 cm.","1 cm.","1,2 cm."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"Señale la respuesta incorrecta en relación a la toma de la temperatura:",ops:["En la toma de la temperatura con termómetro electrónico la sonda debe colocarse paralela al brazo.","En la toma de la temperatura con termómetro digital debe colocarse formando un ángulo de 30° con respecto al cuerpo.","En la toma de la temperatura rectal se debe colocar una pequeña cantidad de lubricante, como vaselina, en la punta del termómetro.","En la toma de la temperatura ótica en pacientes menores de 3 años debe tirar del pabellón auricular hacia atrás y hacia arriba."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"¿Cuál de las siguientes sondas vesicales tiene punta en forma de pico de pato?:",ops:["Dufour.","Tiemann.","Couvelaire.","Mercier."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"En la aplicación de ultrasonidos cuando la sustancia que se utiliza como conductora tiene propiedades terapéuticas se denomina:",ops:["Sonoferesis.","Fonoferesis.","Intoforesis.","Electroferesis."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"En la administración de medicación por vía inhalatoria, ¿cuándo debe realizarse la pulsación del inhalador de cartucho presurizado?:",ops:["Después de finalizar la inspiración.","Durante la espiración.","Antes de comenzar la inspiración.","Una vez iniciada la inspiración."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"Señale la respuesta incorrecta en relación a la administración de fármacos por vía oral:",ops:["Etiquetar con el número de habitación y cama el vaso de la dosis.","No retirar la medicación de su envoltura original hasta su administración.","En la administración por vía oral los jarabes deben administrarse en último lugar.","En pacientes con problemas de deglución se puede asociar la medicación oral con la dieta."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"La dificultad respiratoria en posición horizontal se denomina:",ops:["Ortopnea.","Platipnea.","Disnea.","Respiración estertorosa."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"¿Cuál de los siguientes parámetros no es evaluado por la escala de Braden?:",ops:["Percepción sensorial.","Actividad.","Temperatura corporal.","Riesgo de lesiones cutáneas."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"¿Cuál de los siguientes no es un factor de riesgo de lesiones por presión?:",ops:["IMC < 19,5.","Estado de la piel alterado.","Enfermedades vasculares y respiratorias.","Afectación de la percepción sensorial."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"Las nuevas guías del Consejo Europeo de Resucitación 2025 hablan de 3 pasos para salvar una vida, señale la correcta:",ops:["Comprobar, llamar y RCP.","Alertar, RCP y DESA.","Proteger, alertar y socorrer.","Reconocer, activar el sistema de emergencias y desfibrilar."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"Señale la respuesta incorrecta en relación al cambio de una sonda vesical:",ops:["Sonda de látex debe cambiarse cada 21 días.","Sonda de silicona debe cambiarse cada 60 días.","Sonda de látex duración máxima 60 días.","Sonda de PVC su mantenimiento no debe superar los 7 días."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"La condición que debe cumplir la actividad, práctica o servicio para ser considerada de calidad es:",ops:["Indicador de calidad.","Estándar de calidad.","Criterio de calidad.","Garantía de calidad."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"En la relación de ayuda aquella que se centra en el problema el cual quiere resolver de forma directa, sin buscar los recursos del paciente es:",ops:["Empático.","Paternalista.","Democrático.","Autoritario."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"Señale la respuesta incorrecta en relación a la administración de fármacos:",ops:["La medicación debe prepararse de forma individualizada.","Los medicamentos deben ser entregados directamente al paciente o a su familiar acompañante.","La manipulación de agentes quimioterápicos debe hacerse con guantes.","La preparación y administración del fármaco lo realizará el mismo profesional."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"La carencia de que vitamina puede producir pelagra:",ops:["B1.","B3.","B9.","B12."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"En las fases de cicatrización de las úlceras por presión la fase en la que hay un proceso de coagulación, inflamación y limpieza de la herida es:",ops:["Fase de granulación.","Fase de epitelización.","Fase de cicatrización.","Fase exudativa."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"¿Cuál es el tercer eslabón de la cadena de supervivencia publicada en las nuevas recomendaciones del Consejo Europeo de Resucitación 2025?:",ops:["Desfibrilación precoz.","Cuidados avanzados y postresucitación.","Supervivencia y recuperación.","RCP precoz."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"¿Qué tipo de incontinencia está provocada por una obstrucción anatómica?:",ops:["Incontinencia de estrés.","Incontinencia de urgencia.","Incontinencia de esfuerzo.","Incontinencia por rebosamiento."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"El paciente Argimiro Pérez Pérez ha sufrido un atropello. Tras su valoración observa que tiene ojos de mapache. ¿Qué le indica este signo?:",ops:["Fractura del hueso temporal.","Fractura cervical.","Lesión cervical.","Fractura de la base del cráneo."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"¿Qué sonda nasogástrica se utiliza para vaciado gástrico por aspiración?:",ops:["Levin.","Salem.","Sengstaken-Blakemore.","Cantor."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"Señale la respuesta incorrecta en relación a la escalera analgésica de la OMS:",ops:["Primer escalón: analgésicos no opioides y coadyuvantes.","Segundo escalón: analgésicos opioides débiles, analgésicos no opioides y coadyuvantes.","Tercer escalón: analgésicos opioides débiles, analgésicos opioides potentes y coadyuvantes.","Todas son correctas."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"Señale la respuesta incorrecta en relación a la higiene del paciente:",ops:["Las uñas de los pies deben cortarse en línea recta.","En la higiene de oídos no deben usarse bastoncillos.","En el paciente inconsciente la higiene bucal debe realizarse con una torunda.","En la higiene perianal la crema barrera debe retirarse con un aceite, nunca con agua."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"En los procesos de transferencia de calor la transferencia de calor que se da entre dos cuerpos a distancia es:",ops:["Radiación.","Conducción.","Convección.","Evaporación."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"¿Qué significa el campo CC en un correo electrónico?:",ops:["Copia de seguridad del mensaje enviado.","Con copia, permite enviar el mensaje a destinatarios adicionales que pueden ver quienes lo reciben.","Copia cifrada, utilizada para enviar mensajes de forma segura.","Correo certificado, que confirma la entrega del mensaje."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"La facilidad con la que la población puede recibir la atención que necesita teniendo en cuenta que no solo contempla barreras de tipo estructural sino económico, organizativo, etc. Este concepto hace referencia a:",ops:["Accesibilidad.","Eficiencia.","Aceptabilidad.","Utilidad."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"¿Qué atajo de teclado se utiliza para copiar un elemento seleccionado?:",ops:["Ctrl + V.","Ctrl + X.","Ctrl + C.","Ctrl + Z."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"Cualquier efecto nocivo, no deseado, no intencionado, de un medicamento, que aparece en dosis utilizadas en humanos se denomina:",ops:["Reacción adversa medicamentosa.","Evento adverso medicamentoso.","Efecto colateral.","Reacción alérgica."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"Señale la respuesta incorrecta en relación a la toma de la presión arterial:",ops:["Si el brazo está más elevado que el corazón dará unas cifras de presión arterial menores a las reales.","Si se utiliza un manguito corto y estrecho se sobreestiman las cifras de presión arterial.","Si se utiliza un manguito largo y ancho se subestiman las cifras de presión arterial.","En caso de duda sobre que manguito utilizar deberá utilizarse el manguito corto y estrecho pues el error de sobreestimación es menor que el de infraestimación."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"Una úlcera por presión o lesión por presión es un tipo de herida que cicatriza por:",ops:["Primera intención.","Segunda intención.","Tercera intención.","Cuarta intención."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"Un paciente presenta una quemadura con afectación del miembro superior izquierdo y miembro inferior izquierdo, ¿qué porcentaje de superficie corporal quemada presenta?:",ops:["18%.","27%.","36%.","45%."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"Señale la respuesta incorrecta en relación a la toma de la frecuencia cardiaca mediante monitor con 5 electrodos:",ops:["Rojo debajo de la clavícula cerca del hombro derecho.","Blanco debajo del apéndice xifoides.","Negro debajo del apéndice xifoides.","Verde borde costal inferior izquierdo."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"¿A qué hace referencia el término hipercapnia?:",ops:["Elevación de dióxido de carbono en sangre.","Elevación de pH en sangre.","Elevación de bicarbonato en sangre.","Situación de acidosis sanguínea."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"La medición de casos nuevos de una enfermedad que aparecen en una población durante un tiempo determinado:",ops:["Incidencia.","Prevalencia.","Prevención de la salud.","Promoción de la salud."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"La prevención secundaria se basa en el diagnóstico y tratamiento precoz, ¿en qué fase de la enfermedad actúa?:",ops:["Periodo de clínico.","Periodo prepatogénico.","Periodo prodrómico.","Periodo presintomático."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"El patrón respiratorio propio de un paciente con acidosis metabólica es:",ops:["Kussmaul.","Biot.","Trepopnea.","Cheyne-Stokes."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"¿Cuál de las siguientes escalas es una escala de valoración de dolor utilizada en pediatría?:",ops:["Escala EVA.","Escala numérica.","Escala de expresión facial.","Cuestionario de McGill."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"Señale la respuesta correcta en relación a las ventilaciones durante la RCP:",ops:["Realice ventilaciones de 1 segundo cada una.","Realice ventilaciones de 500 a 600 ml de aire.","Proporcione ventilaciones que hagan que el tórax se eleve visiblemente.","Proporcione solo la cantidad de aire necesaria para que el tórax comience a elevarse."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"En una nutrición enteral qué tipo de fórmula contiene las proteínas hidrolizadas:",ops:["Fórmula polimérica.","Fórmula elemental.","Fórmula oligomérica.","Fórmula incompleta."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"Señale la respuesta incorrecta en relación a la higiene del recién nacido en las primeras horas de vida:",ops:["La duración del baño debe ser inferior a 5 minutos.","No debe retirarse el vérnix.","Se utilizará una esponja sin jabón o con una cantidad mínima.","En el caso de manchas de sangre o meconio podrá realizarse un aseo completo."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"El paciente Argimiro Pérez Pérez se encuentra en decúbito lateral. ¿Cuál de las siguientes localizaciones no es una zona de riesgo de úlcera por presión?:",ops:["Crestas ilíacas.","Omoplatos.","Maléolos.","Sacro."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"Cuál de los siguientes nutrientes tiene función plástica:",ops:["Hidratos de carbono.","Lípidos.","Proteínas.","Sales minerales."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"¿Cuál de los siguientes es un ritmo desfibrilable por un DESA?:",ops:["Asistolia.","Actividad eléctrica sin pulso.","Fibrilación ventricular.","Taquicardia supraventricular."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"Señale la respuesta incorrecta en relación a los colirios:",ops:["Tapón amarillo = anestésicos.","Tapón rojo = midriáticos.","Tapón verde = antibióticos.","Tapón blanco = lágrimas artificiales."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"¿Cuál de las siguientes escalas se utiliza para valorar depresión en paciente con demencia?:",ops:["Escala de Cornell.","Escala de Downton.","Mini Examen de Lobo.","Test del informador."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"¿Cuál de los siguientes es un método de calor seco?:",ops:["Baños de parafina.","Envolturas.","Compresas.","Fomentos."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"La fase del duelo que se produce tras el shock inicial es:",ops:["Ira.","Negación.","Negociación.","Pacto."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"¿Qué nivel de prevención actúa bajando la incidencia?:",ops:["Prevención primaria.","Prevención secundaria.","Prevención terciaria.","Prevención cuaternaria."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"Señale la respuesta incorrecta en relación al sondaje vesical:",ops:["Se debe mantener siempre un sistema de drenaje cerrado.","La bolsa de diuresis debe ser una bolsa colectora de sistema cerrado, estéril, con válvula antirreflujo y sistema de vaciamiento.","Utilizar lubricante liposoluble urológico estéril.","Para llenar el balón de fijación de la sonda debe utilizarse agua destilada estéril."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"Una forma farmacéutica líquida para administración por vía oral que está formada por una mezcla de líquidos inmiscibles es:",ops:["Suspensión.","Solución.","Emulsión.","Colutorio."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"En la formación de lesiones por presión la fuerza tangencial y perpendicular entre el cuerpo y la superficie de apoyo es:",ops:["Presión.","Roce.","Fricción.","Cizalla."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"En el proceso de comunicación los signos y símbolos utilizados para enviar el mensaje son:",ops:["El emisor.","El canal.","El contexto.","El código."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"Señale la respuesta incorrecta en relación a los cribados:",ops:["Prueba de alta sensibilidad.","Debe ser una prueba inocua y aceptada.","Es una prueba que puede dar muchos falsos negativos.","Es una prueba que puede dar muchos falsos positivos."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"Para realizar una cama ocupada, indica la incorrecta:",ops:["Nos lavaremos las manos e informaremos.","Retirar la ropa superior, a excepción de la sábana.","Giraremos al paciente, para retirar las sábanas sucias y poner las limpias.","Le dejaremos en posición de decúbito prono."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"¿Cuál de los siguientes es una exploración instrumental dentro de la exploración física? Señale la respuesta correcta:",ops:["Inspección.","Electrocardiografía.","Percusión.","Palpación."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"Tras la toma de la temperatura evidencia que el paciente Argimiro Pérez Pérez tiene 39,5°C, se trata de:",ops:["Fiebre.","Febrícula.","Urgencia.","Fiebre moderada."],c:3,e:"Simulacro 02 (Docentia) · Respuesta oficial: D."},
+{b:"SIM2",q:"Una vacuna que contiene más de un componente antigénico de uno o de diferentes microorganismos es:",ops:["Polivalente.","Combinada.","Monovalente.","Inactivada."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"La comunicación que se establece a una distancia de entre 1,25 y 3,50m es:",ops:["Pública.","Social.","Personal.","Íntima."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"Señale la respuesta incorrecta en relación al masaje cardiaco:",ops:["La profundidad debe ser de al menos 5 cm y no más de 6 cm.","El masaje debe realizarse en el esternón dos dedos por encima del apéndice xifoides.","Si tiene que realizar RCP en un domicilio y el paciente se encuentra en cama, no debe bajarlo al suelo, deberá realizar la RCP sobre el colchón haciendo compresiones más profundas.","El ritmo del masaje son 100 – 120 compresiones por minuto."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"¿Cuál de los siguientes parámetros no forma parte de la categorización de anciano frágil?:",ops:["Mayor de 65 años que vive solo.","Mayor de 65 años que ha enviudado recientemente.","Mayor de 65 años con patología mental acompañante o predominante.","Mayor de 65 años con incapacidad para utilizar el teléfono."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"El informe Lalonde puso de manifiesto los determinantes y su influencia en la salud de la población. Los factores socioculturales y económicos, las estructuras sociales, la ideología, la violencia, el estrés, la competitividad, etc, se podrían enmarcar en:",ops:["Medio ambiente.","Estilo de vida.","Sistema de organización de la asistencia sanitaria.","Biología humana."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
+{b:"SIM2",q:"Señale la respuesta incorrecta en relación a la higiene ocular:",ops:["La limpieza del ojo debe realizarse desde el lacrimal hacia fuera.","Para la limpieza del ojo deberá usarse material distinto para cada ojo.","En caso de evidencia de infección la limpieza del ojo debe realizarse desde el ángulo externo al ángulo interno.","Para la limpieza del ojo deberán usarse gasas estériles."],c:2,e:"Simulacro 02 (Docentia) · Respuesta oficial: C."},
+{b:"SIM2",q:"Úlcera que tiene aspecto de ampolla, ¿qué categoría es?:",ops:["Categoría I.","Categoría II.","Categoría III.","Categoría IV."],c:1,e:"Simulacro 02 (Docentia) · Respuesta oficial: B."},
+{b:"SIM2",q:"¿Cómo son las heces en una ileostomía?:",ops:["Líquidas y muy irritativas.","Líquidas y poco irritativas.","Sólidas y muy irritativas.","Sólidas y poco irritativas."],c:0,e:"Simulacro 02 (Docentia) · Respuesta oficial: A."},
 // ===== HIST (Examen Oficial OPE 2014/2015 Completo) =====
 {b:"HIST",q:"[OPE 2015 C1] De acuerdo con el artículo 4 del Decreto 206/2005, de provisión de plazas de personal estatutario del Servicio Gallego de Salud, señale cuál de los siguientes NO es un sistema de provisión de plazas:",ops:["Promoción interna","Movilidad","Carrera profesional","Reingreso provisional al servicio activo"],c:1,e:"Respuesta oficial OPE 2015: B."},
 {b:"HIST",q:"[OPE 2015 C2] El artículo 6 de la Ley 14/1986, de 25 de abril, General de Sanidad, establece que las actuaciones de las Administraciones Públicas estarán orientadas a:",ops:["Garantizar que todas las acciones sanitarias se desarrollen dirigidas a la prevención de enfermedades y no solo a su curación","Garantizar la información sobre los servicios sanitarios","Promover el interés colectivo mediante la educación de la población","Garantizar que los ciudadanos obtengan los medicamentos y productos sanitarios que consideren necesarios para la salud"],c:3,e:"Respuesta oficial OPE 2015: D."},
@@ -3584,123 +3509,8 @@ const Q = [
 {b:"HIST",q:"[OPE 2015 E108] ¿Qué método utilizará para la esterilización de instrumental óptico?",ops:["Calor seco","Ácido peracético líquido","Óxido de etileno","Óxido de anhídrido"],c:2,e:"Respuesta oficial OPE 2015: C."},
 {b:"HIST",q:"[OPE 2015 E109] Tenemos un paciente en la planta con reflujo gastro-esofágico importante. ¿En qué posición lo colocamos para que mejore la sintomatología?",ops:["Trendelenburg","Decúbito supino","Decúbito prono","Fowler"],c:3,e:"Respuesta oficial OPE 2015: D."},
 {b:"HIST",q:"[OPE 2015 E110] El médico del servicio de medicina interna, ordena a la enfermera la extracción de hemocultivos a Juan, paciente de la habitación 206. ¿Cuándo debe la enfermera realizar dicha extracción?",ops:["Siempre a primera hora de la mañana","En cualquier momento a lo largo del día, cuando el paciente no presente fiebre","Cuando el paciente presente un pico febril","Siempre de noche"],c:2,e:"Respuesta oficial OPE 2015: C."},
-
-// ===== INF (Tema 6: Nociones básicas de informática) =====
-{b:"INF",q:"El Tema 6 del programa específico TCAE del SERGAS trata sobre:",ops:["Documentación sanitaria clínica y no clínica","Nociones básicas de informática: procesador de textos, bases de datos y correo electrónico","Prevención y promoción de la salud","Habilidades de comunicación"],c:1,e:"El Tema 6 es 'Nociones básicas de informática: concepto del procesador de textos, bases de datos y correo electrónico. Intranet: concepto.'"},
-{b:"INF",q:"Un procesador de textos es una aplicación informática que permite:",ops:["Gestionar bases de datos relacionales","Enviar y recibir correo electrónico","Crear, editar y formatear documentos de texto","Navegar por internet"],c:2,e:"El procesador de textos sirve para crear, editar y dar formato a documentos de texto (ej. informes, notas)."},
-{b:"INF",q:"Una base de datos se define como:",ops:["Un conjunto organizado de información almacenada de forma estructurada para su consulta y gestión","Un programa exclusivo para el envío de correo electrónico","Una red interna de un hospital sin acceso a internet","Un tipo de procesador de textos"],c:0,e:"Una base de datos es un conjunto organizado y estructurado de datos, almacenados para facilitar su búsqueda, gestión y actualización."},
-{b:"INF",q:"El correo electrónico (email) es una herramienta que permite:",ops:["Solo recibir mensajes, nunca enviarlos","Enviar y recibir mensajes y archivos de forma electrónica entre usuarios","Únicamente compartir documentos en papel","Imprimir documentos de forma remota"],c:1,e:"El correo electrónico permite el intercambio de mensajes y archivos digitales entre usuarios a través de una red."},
-{b:"INF",q:"Se denomina intranet a:",ops:["Una red de comunicación privada de una organización, basada en la tecnología de internet, de acceso restringido a sus miembros","La red pública de internet accesible por cualquier usuario","Un tipo de virus informático","Un sistema exclusivo de almacenamiento en papel"],c:0,e:"La intranet es una red privada, interna de una organización (p. ej. un hospital), que usa tecnología similar a internet pero de acceso restringido a su personal."},
-{b:"INF",q:"La diferencia principal entre internet e intranet es que:",ops:["No existe ninguna diferencia, son sinónimos","Internet es una red pública mundial e intranet es una red privada de acceso restringido a una organización","Intranet solo sirve para enviar correos","Internet solo funciona dentro de los hospitales"],c:1,e:"Internet es una red global de acceso público; la intranet es una red privada interna, de acceso restringido al personal de una organización."},
-{b:"INF",q:"IANUS, la historia clínica electrónica del SERGAS, es un ejemplo de aplicación informática orientada a:",ops:["La gestión administrativa de nóminas del personal","La unificación e informatización de la historia clínica de los pacientes","El control de existencias del almacén general","La gestión del correo electrónico corporativo"],c:1,e:"IANUS es la historia clínica electrónica unificada del SERGAS, que integra la información clínica del paciente."},
-{b:"INF",q:"La plataforma TELEA del SERGAS es un sistema informático orientado a:",ops:["La teleasistencia y telemedicina domiciliaria","La gestión de las nóminas del personal estatutario","El registro exclusivo de quirófanos","La facturación a pacientes privados"],c:0,e:"TELEA es la plataforma de teleasistencia/telemedicina del SERGAS, que permite el seguimiento remoto de pacientes."},
-{b:"INF",q:"Entre las ventajas de la informatización de la documentación sanitaria se encuentra:",ops:["El aumento del riesgo de pérdida física del papel únicamente","La facilidad de acceso, actualización y transmisión rápida de la información entre profesionales","La imposibilidad de compartir datos entre servicios","La reducción de la seguridad de los datos del paciente"],c:1,e:"La informatización facilita el acceso rápido, la actualización en tiempo real y la transmisión ágil de la información clínica entre profesionales."},
-{b:"INF",q:"Respecto a la protección de datos en los sistemas informáticos sanitarios, el TCAE debe:",ops:["Compartir libremente las contraseñas de acceso con cualquier compañero","Guardar la confidencialidad de los datos del paciente y no acceder a información que no le corresponda","Imprimir y distribuir libremente los historiales clínicos","Anotar las contraseñas en un lugar visible del puesto de trabajo"],c:1,e:"El TCAE, como el resto del personal sanitario, está obligado a la confidencialidad y al uso restringido de los sistemas informáticos según sus competencias, conforme a la normativa de protección de datos."},
-{b:"INF",q:"Un 'hardware' informático hace referencia a:",ops:["Los programas y aplicaciones instalados en el ordenador","Los componentes físicos y tangibles de un equipo informático (pantalla, teclado, CPU...)","Únicamente las bases de datos","El sistema operativo exclusivamente"],c:1,e:"El hardware son los componentes físicos de un sistema informático (CPU, monitor, teclado, ratón, etc.), a diferencia del software, que son los programas."},
-{b:"INF",q:"Un 'software' informático hace referencia a:",ops:["Los componentes físicos del ordenador","El conjunto de programas y aplicaciones que permiten el funcionamiento del equipo","El cableado de red del hospital","Los periféricos como impresora y escáner"],c:1,e:"El software es el conjunto de programas, aplicaciones y sistemas operativos que hacen funcionar el hardware."},
-{b:"INF",q:"Si quieres consultar alguna prescripción de un paciente ingresado en tu unidad, debes acceder a la siguiente aplicación informática:",ops:["Fides","Synasp","Silicon","Recex"],c:2,e:"Silicon es la aplicación informática utilizada en el SERGAS para consultar prescripciones de pacientes ingresados."},
-// ===== T24 (100 preguntas tipo test TCAE 2024) =====
-{b:"COM",q:"¿Cuáles son las características del contenido de la comunicación verbal?",ops:["Claridad, concisión y coherencia.","Buena puntuación, corrección sintáctica y precisión.","Expresión facial, movimientos del cuerpo y postura.","Claridad, concisión, coherencia, sencillez y precisión."],c:3,e:"Respuesta oficial: D.",n:true},
-{b:"PRL",q:"Indique cuál es el mecanismo de transmisión más frecuente, respecto a la exposición laboral a los patógenos transmitidos por la sangre (transmisión hemática):",ops:["Salpicaduras de sangre a los ojos.","Contacto con prendas o equipos contaminados con sangre fresca.","Inoculación accidental por pinchazos con agujas o bisturíes contaminados con sangre de pacientes infectados.","Salpicaduras en la parte de la piel donde existen pequeños cortes o abrasiones."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"PRL",q:"¿Cuál de los siguientes fluidos biológicos NO se considera como potencialmente infeccioso?",ops:["Líquido cefalorraquídeo.","Semen y secreciones vaginales.","Orina y heces con sangre no visible.","Hemoderivados y componentes de la sangre."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"PRL",q:"Según la clasificación de los agentes biológicos, los pertenecientes al grupo 1 son aquellos que:",ops:["Pueden causar una enfermedad y pueden suponer un peligro para los trabajadores.","Resultan poco probables que causen enfermedades al hombre.","Causan una enfermedad grave en el hombre y suponen un serio peligro para los trabajadores.","Pueden causar una enfermedad grave en el hombre y presentan un serio peligro para los trabajadores."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"AIS",q:"¿A qué se denomina “Tropismo” en las infecciones nosocomiales?",ops:["Tiempo que transcurre entre el momento de exposición al riesgo hasta que aparecen los signos y síntomas.","La selectividad que presentan algunos microorganismos por un determinado tejido.","El lugar en el que puede mantenerse el microorganismo de forma indefinida.","La condición necesaria para que un sujeto sea invadido por un microorganismo."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"HOS",q:"Los residuos del grupo III también se podrán eliminar como residuos asimilables a los municipales, siempre que hayan sido previamente tratados mediante:",ops:["Incineración en hornos preparados para esta finalidad.","Esterilización por vapor caliente a presión, por técnica de autoclave.","Desinfección, por el riesgo de infección para la comunidad.","Microondas."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"HOS",q:"¿Qué entidad se encarga de la recogida y eliminación de los residuos radiactivos?",ops:["ENRESA.","Empresa Nacional de Residuos Sanitarios.","Agencia de Protección Ambiental.","Organización Mundial de la Salud."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"DES",q:"De los siguientes tipos de desinfectantes, ¿cuál actúa inhibiendo el crecimiento bacteriano?",ops:["Bactericida.","Fungicida.","Bacteriostático.","Virucida."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"FAR",q:"Insulinas, Glucagón y Vacunas, son medicamentos:",ops:["Termolábiles.","Fotosensibles.","Reconstituidos.","Fotosensibilizantes."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"UPP",q:"¿Cuál es el estadio en el que se realiza un desbridamiento en una úlcera por presión?",ops:["Estadio I.","Estadio II.","Estadio III.","Estadio IV."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"UPP",q:"En la escala de Norton para la medición de riesgo de desarrollar úlceras por presión, el índice de 5 a 11 es:",ops:["Riesgo medio.","Riesgo muy alto.","Riesgo evidente.","Riesgo mínimo."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"MUE",q:"A la presencia de linfa en una muestra biológica de orina, se le denomina:",ops:["Quiluria.","Piuria.","Lipiduria.","Urobilina."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"TEO",q:"El tejido celular subcutáneo que también contiene paquetes vasculares y nerviosos, se denomina:",ops:["Dermis.","Epidermis.","Hipodermis.","Stratum granulosum."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"TEO",q:"¿A que denominamos sialorrea o ptialismo?",ops:["Tumor salival.","Supresión de la secreción salival.","Inflamación del conducto salival con retención de la saliva.","Flujo exagerado de saliva."],c:3,e:"Respuesta oficial: D.",n:true},
-{b:"NUT",q:"La Pelagra es una enfermedad derivada de la deficiencia de:",ops:["Niacina.","Retinol.","Vitamina K.","Tiamina."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"NUT",q:"Durante la uperización (U.H.T), ¿a qué temperatura y tiempo se exponen los alimentos?",ops:["Altas temperaturas inferiores a 100 ºC durante pocos segundos.","Altísimas temperaturas (140 ºC) durante muy poco tiempo, 2 segundos.","Altas temperaturas (120 ºC) durante un periodo de tiempo de 20 minutos.","Altísimas temperaturas (140 ºC) durante un periodo de tiempo de 15 minutos."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"UNI",q:"Steady, Chorus, Marisa, son tres tipos de:",ops:["Andadores.","Grúas.","Muletas.","Sillas de ruedas."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"PSI",q:"Respecto a la contención mecánica, y para garantizar al máximo la aplicación correcta de la técnica, es necesario contar como mínimo con:",ops:["4 personas, dos TCAE y dos celadores.","3 profesionales sanitarios y dos familiares.","4 personas, con independencia de la categoría profesional.","5 personas, da igual la categoría profesional."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"TEO",q:"El reflejo que se produce cuando el bebé se sobresalta por un sonido o movimiento brusco, se denomina:",ops:["Reflejo de succión.","Reflejo de Moro.","Reflejo de marcha automática.","Reflejo de presión palmar."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"HOS",q:"¿Cuál es el tiempo máximo de almacenamiento permitido en instalaciones sanitarias para residuos peligrosos no radiactivos del Grupo III?:",ops:["48 horas.","5 días.","10 días.","30 días."],c:3,e:"Respuesta oficial: D.",n:true},
-{b:"UNI",q:"¿Qué cama hospitalaria está provista de un estribo o triángulo de Balkan?",ops:["Cama roto-rest.","Cama electrocircular.","Cama Judet.","Incubadora."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"CON",q:"Se considera fiebre moderada en adultos:",ops:["Entre 37,1 y 37,9 ºC.","Entre 38 y 38,4 ºC.","Entre 38,5 y 39,4 ºC.","Entre 39,5 y 40,5 ºC."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"TEO",q:"La glándula que produce la prolactina es:",ops:["Hipófisis.","Tiroides.","Ovarios.","Pineal."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"CAL",q:"¿Cuál de las siguientes es una dimensión de la calidad asistencial?",ops:["Accesibilidad.","Flexibilidad.","Inocuidad.","Especificidad."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"DES",q:"¿Cuál sería un desinfectante de alto nivel (DAN)?",ops:["Amonio cuaternario.","Amonio cuaternario.","Hipoclorito sódico.","Fenol."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"CAL",q:"Un buen indicador de calidad debe tener una serie de atributos entre los que se encuentra:",ops:["Nulidad.","Validez.","Complejidad.","Todas las opciones de respuesta son falsas."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"COM",q:"Entre los aspectos de la comunicación humana que recoge Watzlawick, NO se encuentra:",ops:["Toda comunicación es multisensorial, temporal e intuitiva.","Es imposible no comunicar.","Toda comunicación tiene un aspecto de contenido y otro de relación.","Todos los intercambios de comunicación son simétricos o complementarios."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"UPP",q:"¿Qué término se utiliza para describir la elasticidad normal de la piel causada por la presión hacia afuera de los tejidos y el líquido intersticial?",ops:["Hidratación.","Turgencia.","Textura.","Pigmentación."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"SON",q:"¿Cuál es el método más utilizado para la inserción segura de una sonda vesical en pacientes con anatomía complicada?",ops:["Inserción sin guía visual.","Ecografía para guiado de la inserción.","Utilización de luz transiluminadora.","Inserción con anestesia general."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"TEO",q:"La profilaxis para minimizar el riesgo de enfermedad hemorrágica en el recién nacido es la administración de:",ops:["Vitamina K.","Vitamina A.","Zidovudina.","Vitamina D3."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"TEO",q:"De los siguientes cartílagos que forman las paredes de la laringe, ¿Cuál es impar y único?",ops:["Aritenoide.","Corniculado.","Cuneiforme.","Cricoide."],c:3,e:"Respuesta oficial: D.",n:true},
-{b:"PSI",q:"Las alucinaciones visuales son características en:",ops:["Agitación de causa orgánica.","Agitación de causa psiquiátrica psicótica.","Agitación de causa psiquiátrica no psicótica.","No es frecuente en ningún tipo de agitación."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"NUT",q:"¿Cuál de los siguientes nutrientes del organismo humano está considerado como micronutriente?",ops:["Glúcidos.","Proteínas.","Vitaminas.","Lípidos."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"NUT",q:"Indique cuáles son las fases de la deglución:",ops:["Fase I y fase II voluntarias y fase III involuntaria.","Fase I involuntaria y fase II voluntaria.","Fase I voluntaria y fase II y III involuntarias.","Fase I y fase II involuntarias y fase III voluntaria."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"SON",q:"¿Cuál de las siguientes es una sonda urinaria?",ops:["Malecot.","Faucher.","Cantor.","Dobhoff."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"SON",q:"Indique cuál de los siguientes es un tipo de enema de retención:",ops:["Enema de dentina.","Enema opaco.","Enema de Chron.","Enema de alcohol metílico."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"SON",q:"Tras la administración de un enema de retención, ¿cuánto tiempo es recomendable retener la sustancia o solución?",ops:["5-10 minutos.","60 segundos.","30 minutos.","10-15 minutos."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"PSI",q:"¿Cuál de las siguientes es un tipo de demencia vascular?",ops:["Enfermedad de Binswanger.","Enfermedad de Huntington.","Enfermedad de Creutzfeldt-Jakob.","Enfermedad de Marchiafava-Bignami."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"UNI",q:"El modelo de cama indicado para pacientes que sufren fracturas o parálisis de las extremidades es:",ops:["Cama de Lord.","Cama de Balkan.","Cama de Judet.","Cama de Foster."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"UPP",q:"¿Cuál de los siguientes es un desbridante autolítico?",ops:["Hidrogeles.","Colagenasa.","Ácidos grasos hiperoxigenados.","Lidocaína al 20 %."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"TEO",q:"¿En qué zona del cuerpo se presenta el primer síntoma de putrefacción cadavérica?",ops:["Hipocondrio izquierdo.","Mesogastrio.","Hipogastrio.","Fosa iliaca derecha."],c:3,e:"Respuesta oficial: D.",n:true},
-{b:"ADM",q:"¿En qué principio de la Bioética se basa el principio hipocrático: Primum non nocere?",ops:["Beneficencia.","Autonomía.","No maleficencia.","Justicia."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"DES",q:"¿Cuál es la finalidad del test de Bowie-Dick?",ops:["Demostrar la ausencia de microorganismos.","Demostrar la ausencia de aire u otros gases no condensados en la cámara de esterilización.","Registrar la temperatura máxima alcanzada en el proceso de esterilización.","Demostrar la presencia de esporas."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"RCP",q:"En relación con la cadena de supervivencia, señale la respuesta correcta:",ops:["El primer eslabón de la cadena es la reanimación cardiopulmonar precoz.","El tercer eslabón de la cadena es la desfibrilación temprana.","La cadena de supervivencia es una sucesión de 5 pasos o eslabones que deben seguirse cuando se presencia una parada cardiorrespiratoria.","El último eslabón de la cadena es la reanimación cardiopulmonar precoz."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"MUE",q:"Un exudado conjuntival se debe realizar:",ops:["Del ángulo interno del ojo al externo.","Indistintamente.","Del ángulo externo del ojo al interno.","Todas las opciones de respuesta son verdaderas."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"CON",q:"La frecuencia cardíaca del RN (recién nacido) sano oscila entre:",ops:["100/160 latidos por minuto.","80/100 latidos por minuto.","60/80 latidos por minuto.","100/120 latidos por minuto."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"UPP",q:"¿Con qué otro nombre se conoce a la lesión de la piel llamada coloquialmente “araña vascular”?",ops:["Roncha vascular.","Mácula purpúrea.","Telangiectasia.","Mácula eritematosa."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"NUT",q:"Para administrar nutrición parenteral central, el catéter a través del cual se introduce habitualmente es colocado en la:",ops:["Arteria carótida.","Arteria mesentérica.","Vena subclavia.","Vena cava."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"FAR",q:"La rama de la farmacología que se ocupa del estudio de la evolución del fármaco en el organismo desde que se administra hasta que es eliminado, se denomina:",ops:["Farmacocinética.","Farmacodinamia.","Farmacoterapia.","Farmacopea."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"FAR",q:"¿Cómo se denominan los fármacos que previenen la formación de gases en el tubo digestivo facilitando su expulsión?",ops:["Laxantes.","Antidiarréicos.","Carminativos.","Antiácidos."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"CON",q:"La disnea en posición de decúbito supino se denomina:",ops:["Apnea.","Polipnea.","Hiperpnea.","Ortopnea."],c:3,e:"Respuesta oficial: D.",n:true},
-{b:"RCP",q:"Si se produce una obstrucción de la vía aérea superior por un cuerpo extraño (OVACE) y como consecuencia un ahogamiento, ¿Qué maniobra de desobstrucción utilizaremos?",ops:["RCP.","Heimlich.","CPR.","Valsalva."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"RCP",q:"¿Cuál de las siguientes medicaciones NO será almacenada en el carro de paradas?",ops:["Midazolam.","Propofol.","Dopamina.","Cloruro de suxametonio."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"PSI",q:"¿Cuál de las siguientes complicaciones derivadas de la inmovilidad es de origen neurológico?",ops:["Atrofia muscular.","Ansiedad.","Alteración del sueño.","Úlceras por presión."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"TEO",q:"¿Por qué nombre se conocen a los extremos distales de un hueso largo?",ops:["Diáfisis.","Epífisis.","Metáfisis.","Ninguna opción de respuesta es verdadera."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"NUT",q:"En la enfermedad de Chron existen alimentos que pueden empeorar la sintomatología, por ello es importante que el paciente consuma:",ops:["Mayor cantidad de hidratos de carbono y fibra alimentaria.","Menor cantidad de hidratos de carbono y mayor cantidad de proteínas.","Mayor cantidad de hidratos de carbono y mayor cantidad de proteínas.","Menor cantidad de hidratos de carbono y menor cantidad de proteínas."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"TEO",q:"Cuál de estas afirmaciones es la CORRECTA:",ops:["Onicalgia refiere la existencia de gases en el intestino.","Osmosis es una enfermedad de la uña causada por hongos.","Onicorresis es la rotura o fisuración de la uña.","Pubalgia es un dolor es la placa ungueal de la uña."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"TEO",q:"Los leucocitos, también llamados glóbulos blancos, son elementos formes de la sangre. Señale que células son leucocitos:",ops:["Fibrinógeno y protrombina.","Eosinófilos y basófilos.","Eritrocitos y hematíes.","Plaquetas y trombocitos."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"CON",q:"La respiración con ritmo y frecuencia irregular típica de las lesiones encefálicas, se denomina:",ops:["De Cheyne-Stokes.","Biot.","Kussmaul.","Asmática."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"CON",q:"En la medición del pulso apical es cierto que:",ops:["Se toma en la arteria carótida.","Es necesario el estetoscopio, esfigmomanómetro aneroide, reloj segundero, hoja y bolígrafo. Se toma situando la membrana del estetoscopio en la zona apical cardiaca, en la línea media clavicular y el tercer espacio intercostal izquierdo, en un adulto sano.","Se toma en la arteria pedia a nivel periférico.","Se toma situando la membrana del fonendoscopio en la zona apical cardiaca, en la línea media clavicular y el quinto espacio intercostal izquierdo, en un adulto sano."],c:3,e:"Respuesta oficial: D.",n:true},
-{b:"UPP",q:"Observamos en la piel de un paciente una lesión primaria sólida, protuberante de 1 a 2 cm de diámetro, que afecta a la dermis y a la hipodermis. Señala a cuál nos estamos refiriendo:",ops:["Costra.","Escama.","Nódulo.","Vesícula."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"SON",q:"¿Cuál de estas sondas se utiliza en un sondaje vesical y se recomienda en hombres con la uretra estrecha?",ops:["Sonda de Salem Sump.","Sonda Tiemann.","Sonda Linton-Nachlas.","Sonda Miller-Abbott."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"NUT",q:"Cuál de las siguientes vitaminas es liposoluble:",ops:["Filoquinona.","C.","Tiamina.","B12."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"CON",q:"En la ventilación pulmonar, se intercambian una serie de volúmenes de aire entre los que se incluye el “volumen de ventilación” que es:",ops:["El volumen máximo que puede ser espirado, después de una espiración normal, mediante una espiración forzada.","El volumen máximo, más allá del volumen normal, que puede ser inspirado en una respiración profunda o forzada.","El volumen de aire inspirado y espirado en cada respiración normal.","Es el volumen de aire que queda en los pulmones después de una espiración."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"HOS",q:"Según la OMS la higiene de manos por fricción con preparado de base alcohólica tendrá una duración de:",ops:["10 a 20 segundos.","20 a 30 segundos.","40 a 60 segundos.","Más de 1 minuto."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"TEO",q:"Indicar el orden de las fases del parto:",ops:["Expulsiva, dilatación, alumbramiento.","Dilatación, alumbramiento, expulsiva.","Dilatación, expulsiva, alumbramiento.","Ninguna opción de respuesta es verdadera."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"RCP",q:"La regla de los 9 se utiliza para calcular la superficie corporal quemada. Según la misma, una persona que presenta quemaduras que afectan al brazo, antebrazo y mano izquierda, presenta una superficie quemada aproximada del:",ops:["9 %.","18 %.","36 %.","10 %."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"DES",q:"Las ventajas de la esterilización con Peróxido de Hidrógeno son:",ops:["Precisa aireación tras finalizar la esterilización.","Alta eficacia de penetrabilidad en material canulado.","No genera residuos tóxicos.","La segunda y tercera opción de respuesta son verdaderas."],c:3,e:"Respuesta oficial: D.",n:true},
-{b:"SAL",q:"La proporción entre el número de personas fallecidas a causa de una determinada enfermedad y el número total de personas que padecen esa enfermedad en un determinado periodo de tiempo se denomina:",ops:["Tasa de letalidad.","Tasa de mortalidad.","Tasa de morbilidad.","Esperanza de vida."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"SON",q:"¿Cuál es la sonda vesical de una sola luz, con punta redondeada o acodada en cuya proximidad hay uno o más orificios?",ops:["Dennis.","Robinson.","Levin.","Miller-Abbott."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"DES",q:"¿Qué otra denominación recibe la lavandina?",ops:["Hipoclorito de sodio.","Amoniaco.","Formol.","Aguarrás."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"AIS",q:"El mecanismo de transmisión por gotas de Flügge se realiza a través del:",ops:["Aparato respiratorio.","Aparato reproductor.","Vías urinarias.","Todas las opciones de respuesta son verdaderas."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"EXP",q:"Las Tijeras Metzenbaum normalmente se usan para:",ops:["Disección de tejidos en profundidad.","Cortar vendas.","Para cortar tejidos muy duros.","Ninguna opción de respuesta es verdadera."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"DES",q:"Un producto se considera estéril cuando:",ops:["Cuando existe 1 probabilidad de uno entre un millón de que contenga microorganismos viables. Es lo que se denomina nivel seguro de esterilidad y se expresa como 10(elevado -6).","Cuando existe 1 probabilidad de uno entre un millón de que contenga microorganismos viables. Es lo que se denomina nivel seguro de esterilidad y se expresa como 10(elevado -7).","Cuando existe menos de 1 probabilidad de uno entre un millón de que contenga microorganismos viables. Es lo que se denomina nivel seguro de esterilidad y se expresa como 10(elevado -6).","Ninguna opción de respuesta es verdadera."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"EXP",q:"De las siguientes radiaciones electromagnéticas ¿Cuál se considera ionizante?",ops:["Radiaciones Y e infrarroja.","Radiaciones X y gamma.","Radiaciones alfa y beta.","Radiaciones alfa e infrarroja."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"TEO",q:"¿Cuál de los siguientes huesos NO forma parte del cráneo?",ops:["Vómer.","Frontal.","Occipital.","Pisiforme."],c:3,e:"Respuesta oficial: D.",n:true},
-{b:"CAL",q:"El elemento orientado a la estratificación de los pacientes de acuerdo con su complejidad y necesidades de atención, es:",ops:["La pirámide de Kaiser.","La pirámide de Geiser.","La pirámide de Maslow.","La pirámide de Kelsen."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"TEO",q:"¿A qué modelo de Enfermería pertenece la autora Hildergarde Peplau?",ops:["Modelo de sistemas.","Modelo interaccionista.","Modelo de autocuidados.","Modelo de adaptación."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"EXP",q:"El test de Snellen se utiliza para medir:",ops:["La agudeza auditiva.","La agudeza visual.","La tolerancia al esfuerzo.","La vía ósea de transmisión del sonido."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"EXP",q:"La anestesia que se administra inyectando en el espacio subaracnoideo, se llama:",ops:["Epidural.","Espinal o raquídea.","Regional.","Troncular."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"FAR",q:"¿Cuál de las siguientes opciones es correcta para la administración de gotas óticas en el paciente pediátrico de 1 año?",ops:["Disponer las gotas directamente sobre la membrana timpánica.","Hay que tirar del pabellón auditivo hacia arriba y hacia atrás.","Hay que tirar del pabellón auditivo hacia atrás y hacia abajo.","Tras la administración de la medicación, mantener al paciente acostado del oído afectado durante 3 min."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"HIG",q:"¿A qué distancia de la zona a tratar se debe colocar la lámpara de infrarrojos?",ops:["40 cm.","20 cm.","50 cm.","60 cm."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"UPP",q:"Tras la valoración de un paciente que tiene riesgo de sufrir Úlceras por Presión (UPP) se utilizó la Escala de Norton; si se obtuvo una puntuación de 5 a 11, correspondería con:",ops:["Riesgo muy alto de UPP.","No hay riesgo de UPP.","Riesgo alto de UPP.","Riesgo mínimo de UPP."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"NUT",q:"Dentro de las enfermedades relacionadas con la alimentación, ¿Cuál sería el concepto de ortorexia?",ops:["Obsesión exagerada por comer sano, por seguir una dieta saludable y comer sólo según qué tipo de alimento.","Trastorno caracterizado por la preocupación obsesiva por el físico, con distorsión de la imagen corporal.","Enfermedad que se presenta con la ingesta y períodos compulsivos de comer mucho con otros con dieta estricta.","Alteración grave de la percepción de la propia imagen, que cursa con pérdida extrema del peso corporal."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"UNI",q:"¿Qué tipo de cama es el más recomendado para un paciente mayor quemado?",ops:["Cama articulada.","Cama de Judet.","Cama electro circular.","Cama roto-resto."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"SON",q:"¿Qué complicación postquirúrgica se puede producir en la fase tardía en un paciente ostomizado?",ops:["Dehiscencia de sutura mucocutánea.","Prolapso del estoma.","Necrosis perístoma.","Hemorragia."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"UNI",q:"¿Cuál de las opciones siguientes es un factor de riesgo asociado a las caídas en pacientes ingresados en hospitales de agudos?",ops:["Carecer de antecedentes de caídas previas al ingreso.","Tomar antihipertensivos como tratamiento farmacológico habitual.","Presentar funciones cognitivas normales.","Ausencia de incontinencia urinaria o fecal."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"SON",q:"¿Qué es una sonda de Pezzer?",ops:["Una sonda semirrígida y recta de una sola luz, con punta fungiforme, que puede tener dos o más orificios. Se inserta quirúrgicamente y requiere una sutura en la piel para inmovilizarla.","Una sonda semirrígida recta con tres luces. Se inserta quirúrgicamente y no se introduce en la uretra.","Una sonda rígida de una sola luz, con punta redondeada o acodada en la cercanía de la que hay uno o más orificios. Se usa en sondeos temporales.","Una sonda flexible que presenta una punta redondeada, con dos o tres luces en su interior, una de las cuales sirve para drenar la orina."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"AIS",q:"¿Cuál de las siguientes enfermedades requiere un aislamiento entérico?",ops:["Cólera.","Sarampión.","Difteria.","Sida."],c:0,e:"Respuesta oficial: A.",n:true},
-{b:"SON",q:"¿Cuál es la correcta localización del extremo distal de una sonda nasoentérica?",ops:["Esófago.","Colon transverso.","Cámara gástrica.","Yeyuno."],c:3,e:"Respuesta oficial: D.",n:true},
-{b:"EXP",q:"Señale cuál de las siguientes es una pinza de hemostasia:",ops:["Pinza Duval.","Pinza Foerster.","Pinza Halsted-Mosquito.","Pinza Adson."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"FAR",q:"¿Las mascarillas de Venturi o Ventimask son?",ops:["De bajo flujo.","De flujo intermedio.","De alto flujo.","De flujo manual."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"TEO",q:"Patología del embarazo que cursa con proteinuria e hipertensión arterial, se denomina:",ops:["Enfermedad trofoblástica.","Abruptio.","Hiperémesis.","Preeclampsia."],c:3,e:"Respuesta oficial: D.",n:true},
-{b:"EXP",q:"¿Cuál de las siguientes pinzas se utiliza para hemostasia?",ops:["Pinzas de Doyen.","Pinzas cangrejo.","Pinzas de Adson.","Pinzas de Crile."],c:3,e:"Respuesta oficial: D.",n:true},
-{b:"NUT",q:"Es una aminoácido no esencial:",ops:["Triptófano.","Cisteína.","Lisina.","Valina."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"FAR",q:"¿Qué antagonista específico existe para tratar la intoxicación aguda por opiáceos?",ops:["Rohipnol.","Metadona.","Naloxona.","Cannabis."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"TEO",q:"¿Quién definió la salud de la siguiente manera: “La salud significa estar bien y utilizar las propias capacidades para alcanzarla totalmente.”?",ops:["Dorothy E. Johnson.","Dorothea Orem.","Florence Nightingale.","Sor Callista Roy."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"COM",q:"Señale cuál de las siguientes opciones es una técnica educativa grupal de investigación en el aula:",ops:["Caso.","Phillips 6/6.","Lectura con discusión.","Discusión."],c:1,e:"Respuesta oficial: B.",n:true},
-{b:"NUT",q:"La capacidad de absorción dada por el Ministerio de Sanidad de una absorbente noche es de:",ops:["Entre 300 y 650 ml.","Mayor de 1200 ml.","Entre 900 y 1200 ml.","Entre 600 y 800 ml."],c:2,e:"Respuesta oficial: C.",n:true},
-{b:"NUT",q:"El valor energético de los nutrientes que se utiliza en los cálculos dietéticos en el propuesto por Atwater es de:",ops:["1 g de alcohol etílico equivale a 7 kilocalorías.","1 g de glúcidos equivale a 6 kilocalorías.","1 g de proteínas equivale a 6 kilocalorías.","1 g de lípidos equivale a 8 kilocalorías."],c:0,e:"Respuesta oficial: A.",n:true},
 ];
+
 // ===== APP STATE =====
 let queue = [];
 let answered = false;
@@ -3717,9 +3527,9 @@ function init() {
   Q.forEach(q => { counts[q.b] = (counts[q.b]||0)+1; });
   document.getElementById('hsTotalQ').textContent = Q.length;
   document.getElementById('hsTotalB').textContent = Object.keys(BLOQUES).length;
-  const nuevasCount = Q.filter(q => q.n || NUEVAS_BLOQUES.includes(q.b)).length;
+  const nuevasCount = Q.filter(q => NUEVAS_BLOQUES.includes(q.b)).length;
   const nuevasDesc = document.getElementById('nuevasCardDesc');
-  if(nuevasDesc) nuevasDesc.textContent = nuevasCount + ' preguntas añadidas recientemente, incluyendo TCAE 2024 y los bloques incorporados recientemente.';
+  if(nuevasDesc) nuevasDesc.textContent = nuevasCount + ' preguntas de los bloques añadidos recientemente: Higiene, Nutrición, Farmacología, Aislamientos, Simulacro 02 y más.';
   // Load personal stats
   try {
     const saved = JSON.parse(localStorage.getItem('tcae_stats')||'null');
@@ -3743,25 +3553,6 @@ function init() {
     btn.onclick = () => startMode('block', code);
     grid.appendChild(btn);
   });
-
-  // Elemento discreto de acceso completo, al final de la lista de bloques
-  const advBtn = document.createElement('button');
-  advBtn.className = 'block-btn';
-  advBtn.id = 'advOptionsBtn';
-  advBtn.style.opacity = '0.35';
-  advBtn.innerHTML = `<span class="block-btn-icon">⋯</span><span class="block-btn-info"><span class="block-btn-name">Más opciones</span><span class="block-btn-count">&nbsp;</span></span>`;
-  advBtn.onclick = () => showFullAccessModal();
-  grid.appendChild(advBtn);
-
-  // Si este dispositivo ya desbloqueó el contenido completo antes, restaurarlo automáticamente
-  try {
-    if(localStorage.getItem('full_access_ok') === '1'){
-      const s = document.createElement('script');
-      s.src = 'extra-data.js';
-      s.onload = function(){ if(typeof unlockExtraContent === 'function') unlockExtraContent(); };
-      document.body.appendChild(s);
-    }
-  } catch(e){}
 
 }
 
@@ -3792,7 +3583,7 @@ function startMode(mode, bloque) {
   blockStats = {};
   let pool;
   if(mode === 'nuevas') {
-    pool = Q.filter(q => q.n || NUEVAS_BLOQUES.includes(q.b));
+    pool = Q.filter(q => NUEVAS_BLOQUES.includes(q.b));
     queue = shuffle(pool);
   } else if(mode === 'infinite') {
     pool = Q;
@@ -3809,7 +3600,7 @@ function startMode(mode, bloque) {
   document.getElementById('endScreen').style.display = 'none';
   document.getElementById('quizScreen').style.display = 'block';
   let title;
-  if(mode === 'nuevas') title = '🆕 Últimas preguntas · ' + Q.filter(q=>q.n || NUEVAS_BLOQUES.includes(q.b)).length + ' nuevas';
+  if(mode === 'nuevas') title = '🆕 Últimas preguntas · ' + Q.filter(q=>NUEVAS_BLOQUES.includes(q.b)).length + ' nuevas';
   else if(mode === 'infinite') title = '♾️ Preguntas al azar · Sin límite';
   else if(mode === 'all') title = 'Simulacro completo · '+Q.length+' preguntas';
   else title = BLOQUES[bloque];
@@ -3820,7 +3611,7 @@ function startMode(mode, bloque) {
 function nextQuestion() {
   if(queue.length === 0) {
     if(currentMode === 'nuevas') {
-      queue = shuffle(Q.filter(q => q.n || NUEVAS_BLOQUES.includes(q.b)));
+      queue = shuffle(Q.filter(q => NUEVAS_BLOQUES.includes(q.b)));
     } else if(currentMode === 'infinite') {
       queue = shuffle(Q); // nueva ronda - sin repetir hasta agotar todas las preguntas
     } else {
@@ -3881,13 +3672,13 @@ function selectOpt(idx) {
 }
 
 function updateStats() {
-  const pool = currentMode === 'all' ? Q.length : currentMode === 'infinite' ? Q.length : currentMode === 'nuevas' ? Q.filter(q=>q.n || NUEVAS_BLOQUES.includes(q.b)).length : Q.filter(q=>q.b===currentBloque).length;
+  const pool = currentMode === 'all' ? Q.length : currentMode === 'infinite' ? Q.length : currentMode === 'nuevas' ? Q.filter(q=>NUEVAS_BLOQUES.includes(q.b)).length : Q.filter(q=>q.b===currentBloque).length;
   document.getElementById('lsTotal').textContent = total;
   document.getElementById('lsCorrect').textContent = correct;
   document.getElementById('lsWrong').textContent = wrong;
   document.getElementById('lsPct').textContent = total>0 ? Math.round((correct/total)*100)+'%' : '—';
   if(currentMode === 'infinite' || currentMode === 'nuevas') {
-    const pSize = currentMode === 'nuevas' ? Q.filter(q=>q.n || NUEVAS_BLOQUES.includes(q.b)).length : Q.length;
+    const pSize = currentMode === 'nuevas' ? Q.filter(q=>NUEVAS_BLOQUES.includes(q.b)).length : Q.length;
     const pos2 = (pSize - queue.length) % pSize;
     document.getElementById('progressFill').style.width = Math.min((pos2/pSize)*100,100)+'%';
   } else {
@@ -4667,6 +4458,146 @@ const SIM05 = {
 SIM05.especificaReservaTeo = SIM05.especificaReservaMid;
 SIM05.especificaReservaPrac = SIM05.especificaReserva;
 
+const SIM06 = {
+  comun: [
+    {n:1,q:"¿Cuál de los siguientes NO es un valor superior del ordenamiento jurídico a tenor del art. 1 de la Constitución Española?:",ops:["La dignidad.","La justicia.","La igualdad.","El pluralismo político."],c:0},
+    {n:2,q:"Atendiendo a lo establecido en el Estatuto de Autonomía de Galicia, ¿quién nombra a los conselleiros de la Xunta de Galicia?:",ops:["El Rey.","El Parlamento de Galicia.","El Presidente de la Xunta.","Ninguna de las anteriores es correcta."],c:2},
+    {n:3,q:"Según la Ley General de Sanidad, No es una obligación de los ciudadanos…:",ops:["Cumplir las prescripciones generales de naturaleza sanitaria comunes a toda la población, así como las específicas determinadas por los Servicios Sanitarios.","A utilizar las vías de reclamación y de propuesta de sugerencias en los plazos previstos. En uno u otro caso deberá recibir respuesta por escrito en los plazos que reglamentariamente se establezcan.","Cuidar las instalaciones y colaborar en el mantenimiento de la habitabilidad de las Instituciones Sanitarias.","Responsabilizarse del uso adecuado de las prestaciones ofrecidas por el sistema sanitario, fundamentalmente en lo que se refiere a la utilización de servicios, procedimientos de baja laboral o incapacidad permanente y prestaciones terapéuticas y sociales."],c:1},
+    {n:4,q:"¿Cuál es el nombre de la Ley de Salud de Galicia?:",ops:["Ley 14/1986.","Ley 55/2003.","Ley 41/2002.","Ninguna de las anteriores es correcta."],c:3},
+    {n:5,q:"Según el art. 33 de la Ley de Salud de Galicia NO es autoridad sanitaria…:",ops:["El presidente de la Xunta.","El conselleiro de sanidad.","La alcaldesa de A Coruña.","La jefa territorial de sanidad en Pontevedra."],c:0},
+    {n:6,q:"Según el art. 4 del Estatuto Marco del Personal Estatutario, ¿cuál de los siguientes NO es un principio ordenador del régimen estatutario?:",ops:["Igualdad.","Publicidad.","Celeridad.","Capacidad."],c:2},
+    {n:7,q:"De conformidad con el art. 9 de la Ley 55/2003, de 16 de diciembre, del Estatuto Marco, ¿cuál es el plazo máximo de desempeño de un contrato de interinidad por ejecución de programas de carácter temporal?:",ops:["3 meses en un periodo de 6.","6 meses en un periodo de 12.","9 meses en un periodo de 18.","Ninguna de las anteriores es correcta."],c:3},
+    {n:8,q:"¿Cómo se llama la norma que rige la provisión de plazas de personal estatutario en Galicia?:",ops:["Real Decreto 205/2006.","Real Decreto 206/2005.","Decreto 206/2005.","Decreto 205/2006."],c:2},
+    {n:9,q:"De conformidad con el artículo 18 de la Ley gallega 3/2001, del 28 de mayo, reguladora del consentimiento informado y de la historia clínica de los pacientes, ¿de quién es propiedad la historia clínica?:",ops:["Del paciente.","De la unidad de admisión e historia clínica.","De la Administración sanitaria.","De la Xunta."],c:2},
+    {n:10,q:"Entre los principios de la acción preventiva que establece el artículo 15 de la Ley 31/1995 de Prevención de Riesgos Laborales, no se recoge el siguiente:",ops:["Tener en cuenta la evolución de la técnica.","Sustituir lo peligroso por lo que entrañe poco o ningún peligro.","Adoptar medidas que antepongan la protección individual a la colectiva.","Dar las debidas instrucciones a los trabajadores."],c:2},
+  ],
+  comunReserva: [
+    {n:11,q:"¿Cuál de los siguientes elementos NO es fundamento del orden político y de la paz social según el art. 10.1 de la Constitución Española?:",ops:["La dignidad.","La igualdad.","El libre desarrollo de la personalidad.","Todos los anteriores lo son."],c:0},
+    {n:12,q:"¿Cuántos artículos tiene el Estatuto de Autonomía de Galicia?:",ops:["57.","59.","167.","169."],c:0},
+  ],
+  especifica: [
+    {n:1,q:"¿Qué ley regula la interrupción voluntaria del embarazo en España?:",ops:["La Ley Orgánica 3/2007.","La Ley Orgánica 2/2010.","La Ley Orgánica 3/2021.","La Ley Orgánica 1/2004."],c:1},
+    {n:2,q:"¿Qué ley regula la eutanasia en España?:",ops:["La Ley Orgánica 3/2007.","La Ley Orgánica 2/2010.","La Ley Orgánica 3/2021.","La Ley Orgánica 1/2004."],c:2},
+    {n:3,q:"¿Qué color se asigna en triaje a una mujer víctima de una sumisión química?:",ops:["Rojo.","Amarillo.","Verde.","Naranja."],c:3},
+    {n:4,q:"Dentro del procedimiento de cribado contra la violencia de género, ¿Con cuántos puntos en el DA es obligatorio realizar informe para fiscalía, policía o juzgado?:",ops:["2 puntos o más.","Más de 2 puntos.","4 puntos o más.","Más de 4 puntos."],c:3},
+    {n:5,q:"¿Indique cuál de las siguientes no es una indicación para la sujeción mecánica o física?:",ops:["Agitación controlable con medicación.","Conducta violenta que resulte peligrosa para el paciente o los demás.","Negación del paciente a descansar, beber, comer, que representen una amenaza para su integridad física.","Puede contenerse temporalmente, para recibir la medicación si han fracasado otras opciones terapéuticas."],c:0},
+    {n:6,q:"Los profesionales sanitarios están expuestos frecuentemente a todo tipo de infecciones. ¿Cuál de los siguientes riesgos biológicos sería de origen bacteriano? Señale la respuesta correcta:",ops:["Varicela.","Tuberculosis.","Gripe.","Rubeola."],c:1},
+    {n:7,q:"¿Dentro de qué clasificación se encuentra la pinza de Adson?:",ops:["Pinzas de hemostasia.","Pinzas de campo.","Pinzas de disección.","Pinzas de diéresis."],c:2},
+    {n:8,q:"¿Qué procedimiento no invasivo se utiliza para medir el grado de saturación del oxígeno en sangre?:",ops:["Respirador volumétrico.","Mascarilla Venturi.","Gasometría arterial.","Pulsioximetría."],c:3},
+    {n:9,q:"La escala que se utiliza para valorar la forma de las heces se denomina:",ops:["La escala de Altemir.","La escala de Bristol.","La escala de Zarit.","La escala de Downton."],c:1},
+    {n:10,q:"No se considera una alteración en cuanto al volumen normal de orina:",ops:["Anuria.","Poliuria.","Oliguria.","Glucosuria."],c:3},
+    {n:11,q:"En el Proceso de Atención de Enfermería. ¿De dónde obtendremos la mayor cantidad de información y probablemente la más fidedigna acerca del paciente? Señale la opción correcta:",ops:["De familia o personas que convivan con él o ella.","De otros profesionales.","Del propio individuo/a.","De sus amigos."],c:2},
+    {n:12,q:"¿Cuál de los siguientes no es un drenaje simple?:",ops:["Penrose.","De tejadillo.","Kehr.","Redón."],c:3},
+    {n:13,q:"En una muestra biológica, la sangre arterial se utiliza básicamente para medir:",ops:["La presión parcial de oxígeno.","La presión parcial de dióxido de carbono.","El pH.","Todas son correctas."],c:3},
+    {n:14,q:"¿Qué es la nicturia?:",ops:["Disminución de la orina durante la noche.","Emisión involuntaria y repetida de orina durante la noche.","Aumento de la eliminación de orina durante la noche.","Ninguna de las anteriores respuestas es correcta."],c:2},
+    {n:15,q:"¿Cuál de las siguientes opciones sobre el lavado de manos es incorrecta?:",ops:["Se deben retirar anillos y pulseras.","Debemos llevar las uñas cortas y sin esmalte.","Realizar la higiene de manos con agua y jabón previo al gel hidroalcohólico si tenemos las manos sucias.","El uso de guante sustituye al lavado de manos."],c:3},
+    {n:16,q:"¿Cuál es la principal medida para prevenir la transmisión de infecciones por contacto directo?:",ops:["El uso de guantes.","El lavado cuidadoso de manos antes y después de cada contacto con un paciente.","El uso de guantes y mascarilla.","El uso de gorro, guantes y mascarilla."],c:1},
+    {n:17,q:"Cuando un paciente tiene la imposibilidad de expresar por medio del lenguaje, oral o escrito, y de entender las palabras que se le dirigen, nos referimos a:",ops:["Soliloquio.","Afasia.","Logoclonía.","Coprolalia."],c:1},
+    {n:18,q:"Las posiciones de supino, Sims, Morestin, ginecológica y mahometana, se llaman también respectivamente:",ops:["Ventral, semiprono, trendelemburg, litotomía y genupectoral.","Dorsal, semiprono, trendelemburg, ginecológica y genupectoral.","Dorsal, semiprono, antitrendelemburg, litotomía y Fowler.","Dorsal, semiprono, antitrendelemburg, litotomía y genupectoral."],c:3},
+    {n:19,q:"¿Qué autora de Modelos de Enfermería equipara salud con independencia? Señale la respuesta correcta:",ops:["D. Orem.","V. Henderson.","N. Roper.","I. Orlando."],c:1},
+    {n:20,q:"Por indicación del enfermero/a el TCAE colaborará en la administración de medicamentos con exclusión de la vía:",ops:["Ótica.","Bucal.","Parenteral.","Tópica."],c:2},
+    {n:21,q:"Señale la opción incorrecta relativa al traslado de un paciente en camilla:",ops:["Empujaremos la camilla de forma que el paciente vaya de cara al sentido de la marcha.","Al tomar un ascensor, empujaremos primero los pies.","Tiraremos de la camilla hacia nosotros y sacaremos primero la cabecera al salir del ascensor.","Al descender una rampa, nos colocaremos en la cabecera del paciente, de frente a la pendiente."],c:3},
+    {n:22,q:"En un paciente encamado en el que no existe ninguna contraindicación para el lavado de cabeza, lo colocaremos en posición de:",ops:["Roser.","Morestin.","Proetz.","A y C son correctas."],c:3},
+    {n:23,q:"¿Qué es un aislamiento inverso o protector? Señale la respuesta correcta:",ops:["Es un aislamiento que se aplica a pacientes susceptibles o inmunocomprometidos adoptando medidas que impidan o minimicen el riesgo de infección.","Es un aislamiento que previene la transmisión de enfermedades altamente contagiosas.","Se aplica para prevenir enfermedades que se diseminan por vía aérea.","Es un aislamiento que se aplica en las enfermedades que se transmiten por heces."],c:0},
+    {n:24,q:"De las siguientes medidas de prevención de las infecciones nosocomiales, ¿cuál es de Grado I o eficacia probada?:",ops:["Lavado de manos.","Drenaje urinario cerrado.","a y b son correctas.","Desinfección de suelo y paredes."],c:2},
+    {n:25,q:"En un paciente operado de Colecistectomía retiramos un drenaje tipo Redón con 107 ml de contenido hemático. ¿Cómo se gestiona dentro del centro?:",ops:["Al ser un residuo líquido, se debe eliminar por el desagüe.","Al ser un residuo hemático, es considerado tipo IV.","Si no se puede abrir y eliminar por el desagüe, se ha de eliminar como un residuo IIa.","Al no poder abrirlo para eliminarlo por el desagüe, se ha de eliminar en el contenedor rígido, como un residuo tipo III."],c:2},
+    {n:26,q:"Para qué está indicada la posición de Trendelenburg:",ops:["Pacientes que tienen colocada una sonda vesical.","Pacientes que tienen que someterse a exploración rectal.","Pacientes que tienen que someterse a cirugía de algún órgano pelviano.","Pacientes que sufren problemas cardiacos."],c:2},
+    {n:27,q:"Una toracocentesis permitirá analizar:",ops:["Líquido seminal.","Líquido pleural.","Líquido subseroso.","Líquido cefalorraquídeo."],c:1},
+    {n:28,q:"Al conjunto de signos y síntomas que se manifiestan cuando se produce la falta de droga después de un consumo reiterado se llama:",ops:["Síndrome de dependencia física.","Tolerancia.","Síndrome de abstinencia.","Intoxicación aguda."],c:2},
+    {n:29,q:"Indique cuál de las siguientes afirmaciones respecto a la recogida de muestras es CORRECTA:",ops:["Las muestras de exudados precisan de análisis inmediato y deben mantenerse en transporte a temperatura ambiente.","Después de una punción lumbar el paciente debe permanecer en decúbito supino máximo una hora.","Las muestras para la determinación de oxiuros se recogen por la noche.","La recogida de esputo para estudio microbiológico requiere recoger muestras durante tres días alternos."],c:0},
+    {n:30,q:"Señale la opción incorrecta acerca del Plasma gas:",ops:["Es un procedimiento de esterilización química baja temperatura.","El agente esterilizante es el peróxido de hidrógeno.","Se utiliza para material termosensible.","El material precisa aireación."],c:3},
+    {n:31,q:"La TCAE rechazará el material esterilizado cuando:",ops:["Se comprueba en los registros que se ha alcanzado la presión, temperatura y tiempo estipulado.","Los indicadores colorimétricos no han cambiado de color.","En los controles biológicos no se ha producido crecimiento en los medios de cultivo.","Los envoltorios están perfectamente sellados e identificados."],c:1},
+    {n:32,q:"¿Cuál es la posición indicada para poner un sondaje rectal a un paciente encamado?:",ops:["Genupectoral o mahometana.","Decúbito lateral izquierdo.","De Fowler.","Decúbito prono."],c:1},
+    {n:33,q:"¿Cuál de las siguientes interacciones describe una relación en la que ambos, el agente y el huésped, se benefician mutuamente?:",ops:["Parasitismo.","Comensalismo.","Antagonismo.","Simbiosis."],c:3},
+    {n:34,q:"Señale de cuál de los siguientes factores no depende el agente etiológico para tener capacidad de producir enfermedad en el ser humano:",ops:["Contagiosidad.","Digestibilidad.","Infectividad.","Patogenicidad."],c:1},
+    {n:35,q:"Señale cuál de las siguientes considera que es una actuación adecuada de una TCAE ante un residente en una residencia de mayores:",ops:["Dejar que permanezca en la misma posición si no se queja.","Cambiar de posición al residente cada 2 horas para prevenir úlceras.","Administrar analgésicos si presenta dolor.","Diagnosticar una úlcera por presión si aparece enrojecimiento en la piel."],c:1},
+    {n:36,q:"En relación con los niveles de prevención, es cierto que:",ops:["La Prevención Secundaria intenta evitar que la enfermedad evolucione hacia la muerte o deje secuelas.","La Prevención Primaria trata de evitar la aparición de la enfermedad reduciendo los riesgos existentes.","La Prevención Primaria se encarga del diagnóstico o despistaje rápido de la enfermedad, así como del tratamiento de esta.","La Prevención Terciaria intentar curar la enfermedad antes de que sus efectos sean mayores."],c:1},
+    {n:37,q:"¿Cuál es el orden correcto de la colocación de un equipo de protección individual?:",ops:["Primero nos ponemos la mascarilla, después la bata y finalmente los guantes.","Primero nos ponemos la bata, después los guantes y por último la mascarilla.","El orden es indiferente.","Primero nos ponemos los guantes, después la mascarilla y finalmente la bata."],c:0},
+    {n:38,q:"¿Cuál de los siguientes procesos se caracteriza por eliminar todo tipo de microorganismo incluidas las esporas en el material sanitario?:",ops:["Fumigación.","Desinfección.","Antisepsia.","Esterilización."],c:3},
+    {n:39,q:"¿Cuántas personas son necesarias para trasladar a un paciente que no colabora con seguridad desde la cama a la camilla? Señale la respuesta correcta:",ops:["Solamente una persona.","Al menos dos personas.","Son necesarias, al menos, tres personas.","Es indiferente el número de personas que intervengan."],c:2},
+    {n:40,q:"La continuidad de los cuidados se consigue con una o más de las siguientes:",ops:["Comunicación eficaz entre los miembros del equipo.","Atención al paciente de forma integral (biopsicosocial).","La participación de los miembros del equipo en sesiones facilita la toma de decisiones en relación a los cuidados.","Todas son correctas."],c:3},
+    {n:41,q:"Las muestras de exudado vaginal y endocervical con medio de transporte para cultivo bacteriano, se conservan cuando su traslado no pueda ser inmediato:",ops:["Pueden permanecer hasta 24 horas a -5 ºC.","Si se congelan pueden esperar un tiempo indeterminado.","Refrigeradas y garantizar que no se rompe la cadena de frío.","Temperatura ambiente."],c:2},
+    {n:42,q:"¿Qué elevación en grados tiene la posición semi-Fowler?:",ops:["La cabecera de la cama está elevada a 90º respecto de los pies.","La cabecera de la cama está elevada a 35º respecto de los pies.","La cabecera de la cama está elevada a 30º respecto de los pies.","La cabecera de la cama está elevada a 40º respecto de los pies."],c:2},
+    {n:43,q:"¿Cuándo puede el paciente que va a ser sometido a intervención quirúrgica revocar libremente por escrito su consentimiento?:",ops:["Antes de las 24 h. para la intervención quirúrgica en cuestión.","En cualquier momento.","Antes de las 12 h. de la intervención quirúrgica.","Antes de las 8 h. de la intervención quirúrgica."],c:1},
+    {n:44,q:"Utilizaremos la clorhexidina en solución acuosa al 4% con detergente aniónico para:",ops:["Lavado de manos quirúrgico.","Esterilización de material quirúrgico.","Irrigación ocular.","Limpieza de endoscopios."],c:0},
+    {n:45,q:"En la relación de ayuda el estilo autoritario se caracteriza por:",ops:["Centrarse en el problema de forma directa.","Centrarse en el problema con actitud facilitadora.","Centrarse en la persona con actitud directiva.","Centrarse en la persona con actitud facilitadora."],c:0},
+    {n:46,q:"Aquellas medidas que actúan sobre el medio ambiente como el saneamiento ambiental o la higiene alimentaria forman parte de qué nivel de prevención:",ops:["Prevención primaria.","Prevención secundaria.","Prevención terciaria.","Prevención cuaternaria."],c:0},
+    {n:47,q:"La proporción recomendada de aporte de energía por cada grupo de macronutrientes para un paciente geriátrico será de:",ops:["55% Hidratos de Carbono, 30% Grasas y 15% Proteínas.","50% Hidratos de Carbono, 25% Grasas y 25% Proteínas.","60% Hidratos de Carbono, 20% Grasas y 20% Proteínas.","45% Hidratos de Carbono, 35% Grasas y 20% Proteínas."],c:0},
+    {n:48,q:"En la toma del pulso central mediante auscultación, ¿dónde debe colocar el fonendoscopio?:",ops:["4 espacio intercostal izquierdo línea medio clavicular.","5 espacio intercostal izquierdo línea medio clavicular.","4 espacio intercostal izquierdo línea axilar anterior.","5 espacio intercostal izquierdo línea axilar anterior."],c:1},
+    {n:49,q:"Cómo debe administrar un supositorio:",ops:["Si es para efecto local por la base y si es para efecto sistémico por el ápice.","Si es para efecto local por el ápice y si es para efecto sistémico por la base.","Por el ápice.","Por el lado plano."],c:3},
+    {n:50,q:"Según las recomendaciones del fabricante, cuándo debe cambiarse una sonda de silicona:",ops:["21 días.","60 días.","90 días.","45 días."],c:1},
+    {n:56,q:"Según la forma que la temperatura adopta en la gráfica la fiebre remitente es aquella en la que:",ops:["La diferencia entre la temperatura máxima y la mínima no es mayor de 1°C.","La diferencia entre la temperatura máxima y mínima es mayor de 1°C.","Los valores máximos son hipertérmicos y los mínimos normales o hipotérmicos.","Se alternan periodos febriles de unos días de duración con otros apiréticos."],c:1},
+    {n:57,q:"Indique la opción INCORRECTA en relación con la alimentación:",ops:["Es un proceso voluntario y consciente.","Es susceptible de educación.","Es un conjunto de procesos voluntarios e inconscientes.","Está determinada por la disponibilidad de alimentos, factores religiosos, factores culturales…"],c:2},
+    {n:58,q:"En relación a los factores que se deben tener en cuenta para realizar una correcta medición de la tensión arterial, señale la opción INCORRECTA:",ops:["El manguito debe rodear el 80% del brazo.","La anchura del manguito debe de ser del 40-50% de la circunferencia del brazo.","Se debe poder alcanzar una presión de al menos 30 mmHg por encima de la presión arterial sistólica (PAS), con el dispositivo de insuflación del sistema.","El desinflado debe ser lento, a ritmo de 10 mmHg por segundo o por latido cardiaco."],c:3},
+    {n:59,q:"Durante la toma de la presión arterial mantener el brazo por encima de la altura del corazón provocará:",ops:["Menores cifras de presión arterial.","Mayores cifras de presión arterial.","Se sobreestiman las cifras de presión arterial.","Infraestimación de la PAs y sobreestimación de la PAd."],c:0},
+    {n:60,q:"La cantidad de estímulo doloroso que una persona requiere para sentir dolor es:",ops:["Tolerancia al dolor.","Umbral de dolor.","Alodinia.","Analgesia."],c:1},
+    {n:61,q:"La limpieza y desinfección del termómetro digital debe hacerse con:",ops:["Clorhexidina acuosa al 2%.","Clorhexidina alcohólica al 2%.","Alcohol de 70°.","Ninguna es correcta."],c:2},
+    {n:62,q:"La geriatría:",ops:["Es el estudio del proceso de envejecimiento con participación de las ciencias biológicas, psicológicas y sociales.","Es la disciplina científica que estudia enfermedades ligadas al proceso de envejecimiento.","Es la consecuencia de la acumulación de una gran variedad de daños moleculares y celulares a lo largo del tiempo.","Es el proceso de los fenómenos fisiológicos, psicológicos y sociales del anciano."],c:1},
+    {n:63,q:"En la etiopatogenia de las úlceras por presión, ¿Qué fuerza ocurre en la misma dirección pero en sentido opuesto?:",ops:["La cizalla.","La presión.","La fricción.","La fuerza tangencial."],c:2},
+    {n:64,q:"¿Qué autor habla de atención sanitaria dividida en estructura, proceso y resultado?:",ops:["Ishikawa.","Dever.","Donabedian.","Deming."],c:2},
+    {n:65,q:"¿Qué combinación de teclas se utiliza para cortar el texto seleccionado?:",ops:["Ctrl+X.","Ctrl+C.","Ctrl+V.","Ctrl+Z."],c:0},
+    {n:66,q:"Señale la respuesta incorrecta en relación la higiene del ojo:",ops:["En caso de infección se debe limpiar primero el ojo afectado.","Se deben utilizar gasas distintas para cada ojo.","En pacientes en coma los ojos deben permanecer cerrados.","En caso de infección se debe limpiar el ojo de ángulo interno a ángulo externo."],c:0},
+    {n:67,q:"En la toma de la temperatura ótica a un paciente de un año se debe:",ops:["Tirar del pabellón auricular hacia atrás y hacia abajo.","Tirar del pabellón auricular hacia atrás y hacia arriba.","Tirar del pabellón auricular hacia delante y hacia abajo.","Tirar del pabellón auricular hacia delante y hacia arriba."],c:0},
+    {n:68,q:"La sonda más usada en un sondaje nasogástrico y que tiene una única luz se llama:",ops:["Sonda de Levin.","Sonda de Salem.","Sonda de Swan-Ganz.","Sonda de Sengstaken-Blackemore."],c:0},
+    {n:69,q:"En relación a los cambios psíquicos que se producen durante el proceso de envejecimiento fisiológico, señale la opción incorrecta:",ops:["Se altera la inteligencia cristalizada (aptitud para manejar la propia experiencia) y se mantiene la inteligencia fluida (capacidad de realizar nuevas relaciones).","Se presentan dificultades para utilizar estrategias nuevas de resolución de problemas.","Disminuye la eficiencia, pero se mantiene la eficacia intelectual.","Se conserva mejor la memoria remota que la reciente."],c:0},
+    {n:70,q:"¿Cuál de las siguientes escalas se utiliza para valorar deterioro cognitivo realizando preguntas al familiar o cuidador principal?:",ops:["Test de Jorm y Korten.","Test de Lobo.","Mini mental status de Folstein.","Escala de Beck."],c:0},
+    {n:71,q:"Marque la opción que se corresponda con un factor “patológico” que favorece las caídas en los ancianos:",ops:["Presbiacusia.","Enlentecimiento de los reflejos.","Hipotensión ortostática.","Anquilosis y disminución de la amplitud."],c:2},
+    {n:72,q:"¿En qué tipo de colostomía es más probable que se expulsen heces líquidas o semilíquidas sin patología que lo justifique, simplemente por la ubicación del estoma?:",ops:["Colostomía ascendente.","Colostomía descendente.","Colostomía transversa.","Colostomía sigmoidea."],c:0},
+    {n:73,q:"La incapacidad para respirar en posición horizontal se denomina:",ops:["Platipnea.","Trepopnea.","Ortopnea.","Estertorosa."],c:2},
+    {n:74,q:"¿Cuál de los siguientes NO se consideran criterios para definir al enfermo geriátrico?:",ops:["Pluripatología relevante.","Enfermedad principal incapacitante.","Más de 70 años.","Problemática social asociada a su estado de salud."],c:2},
+    {n:75,q:"En un centro de atención primaria consiguen los mismos resultados en salud que otro, pero utilizando menos recursos económicos y materiales. ¿Qué característica se está poniendo en práctica?:",ops:["Efectividad.","Eficacia.","Eficiencia.","Accesibilidad."],c:2},
+    {n:76,q:"En cuál de las siguientes situaciones NO está contraindicado el lavado del cabello:",ops:["Craneotomía reciente.","Fractura con hundimiento.","Monitorización de la presión intracraneal.","Paciente traumático."],c:3},
+    {n:77,q:"La forma de adquirir inmunidad mediante la administración de una vacuna es:",ops:["Natural activa.","Natural pasiva.","Artificial activa.","Artificial pasiva."],c:2},
+    {n:78,q:"En la toma de la temperatura axilar con termómetro electrónico señale la correcta:",ops:["Coloque el sensor formando un ángulo de 30° con el cuerpo.","Coloque el sensor formando un ángulo de 45° con el cuerpo.","Coloque la sonda de forma perpendicular al brazo.","Coloque la sonda paralela al brazo."],c:3},
+    {n:79,q:"Según la European Resuscitation Council (ERC), las compresiones torácicas de gran calidad deben:",ops:["Comprimir el pecho con una profundidad de al menos 5 cm, pero no más de 6, a una frecuencia de 100-120 compresiones/minuto.","Comprimir el pecho con una profundidad de 4-5 cm, a una frecuencia de 80-100 compresiones/minuto.","Comprimir el pecho con una profundidad de al menos 6 cm, sin límite superior, a una frecuencia de 120-140 compresiones/minuto.","Comprimir el pecho con una profundidad de 5-6 cm, a una frecuencia de 60-80 compresiones/minuto."],c:0},
+    {n:80,q:"¿Cuál de las siguientes NO es una vía inmediata?:",ops:["Intravenosa.","Sublingual.","Intradérmica.","Subcutánea."],c:1},
+    {n:81,q:"En el proceso de comunicación los signos y símbolos utilizados para enviar el mensaje son:",ops:["Canal.","Código.","Contexto.","Mensaje."],c:1},
+    {n:82,q:"En la valoración de la frecuencia cardiaca mediante monitor con 5 electrodos, señale la incorrecta:",ops:["Rojo: debajo de la clavícula cerca del hombro derecho.","Blanco: debajo de la clavícula cerca del hombro izquierdo.","Negro: borde costal inferior derecho.","Verde: cresta ilíaca izquierda."],c:1},
+    {n:83,q:"La vía sublingual evita principalmente:",ops:["La absorción venosa.","La toxicidad sistémica.","El primer paso hepático.","La distribución sistémica."],c:2},
+    {n:84,q:"El valor energético de los nutrientes propuesto por Atwater, se utiliza en los cálculos dietéticos y según estos valores:",ops:["1 gramo de lípidos son 5 kcal.","1 gramo de proteínas son 3 kcal.","1 gramo de alcohol etílico son 7 kcal.","1 gramo de glúcidos son 2 kcal."],c:2},
+    {n:85,q:"¿Cuál de los siguientes nutrientes NO aporta energía?:",ops:["Etanol.","Glúcidos.","Proteínas.","Vitaminas."],c:3},
+    {n:86,q:"En qué fase del duelo de Kübler-Ross el paciente va aceptando la idea la muerte pero está dispuesto a cualquier cosa:",ops:["Ira.","Negación.","Aceptación.","Negociación."],c:3},
+    {n:87,q:"La escala que utiliza una línea con una descripción de “no dolor” a “dolor insoportable” y en la parte posterior una regla graduada de 0 a 10 cm. ¿Cómo se denomina esta escala?:",ops:["Escala numérica.","Escala visual analógica EVA.","Escala de McGill.","Escala simple."],c:1},
+    {n:88,q:"¿Cuál de los siguientes elementos no es una barrera de la comunicación?:",ops:["Ambientales.","Verbales.","Especificidad.","Interpersonales."],c:2},
+    {n:89,q:"Se van a valorar las actividades de la vida diaria de Manuel. ¿Cuál de las siguientes NO es una ABVD?:",ops:["Desplazamiento.","Uso del teléfono.","Vestirse.","Uso del retrete."],c:1},
+    {n:90,q:"¿Qué fase de la farmacocinética se caracteriza por el paso del principio activo al torrente sanguíneo?:",ops:["Biotransformación.","Absorción.","Distribución.","Liberación."],c:1},
+    {n:91,q:"¿Cuál de las siguientes se considera un tipo de reacción adversa medicamentosa?:",ops:["Bioequivalencia.","Biodisponibilidad.","Metabolización.","Efecto secundario."],c:3},
+    {n:92,q:"Una vacuna en la que los microorganismos han perdido su virulencia pero conservando su capacidad inmunógena y teniendo como inconvenientes que la infección vacunal puede ser contagiosa para el entorno es:",ops:["Inactivada.","Vírica.","Monovalente.","Atenuada."],c:3},
+    {n:93,q:"Entre los cuidados de una sonda PEG, y para evitar las adherencias de la sonda a la piel, deberíamos:",ops:["Girar la sonda PEG por lo menos una vuelta diaria.","Lubricar los bordes de la herida de inserción cada vez que se lave.","Extraer la sonda cada 7 días y volver a insertarla.","Toques con povidona yodada."],c:0},
+    {n:94,q:"Las medidas destinadas no solamente a prevenir la aparición de la enfermedad, tales como la reducción de factores de riesgo, sino también a detener su avance y atenuar sus consecuencias una vez establecida, esta definición se corresponde con:",ops:["Prevención de la salud.","Promoción de la salud.","Educación para la salud.","Prevención primaria de salud."],c:0},
+    {n:95,q:"Señale la respuesta incorrecta en relación la higiene bucal:",ops:["La limpieza del diente se debe realizar desde la encía hacia el borde libre.","En pacientes inconscientes o con ventilación mecánica la higiene bucal debe realizarse con torunda.","En pacientes inconscientes o con ventilación mecánica se debe colocar al paciente con la cabeza hacia un lado y/o posición de semifowler.","Tras el cepillado de los dientes se debe realizar un masaje de las encías con cepillo seco sin pasta dentífrica."],c:1},
+    {n:96,q:"En la administración de medicación por vía inhalatoria, ¿cuándo debe realizarse la pulsación del inhalador de cartucho presurizado (ICP)?:",ops:["Una vez iniciada la inspiración.","Antes de comenzar la inspiración.","Después de finalizar la inspiración.","Durante la espiración."],c:0},
+    {n:97,q:"¿Qué debe hacerse con la nutrición enteral continua antes de administrar la medicación por sonda?:",ops:["Aumentar el ritmo de infusión.","Suspenderla 15 minutos antes.","Suspenderla 30 minutos antes.","Suspenderla 45 minutos antes."],c:1},
+    {n:98,q:"Dificultad de la micción debido a procesos patológicos:",ops:["Enuresis.","Oliguria.","Tenesmo vesical.","Disuria."],c:3},
+    {n:99,q:"La reacción idiosincrásica se caracteriza por ser:",ops:["Una reacción psicológica.","Una reacción mediada genéticamente.","Una respuesta inmunitaria.","Un efecto secundario leve."],c:1},
+    {n:100,q:"El programa informático diseñado para crear, editar, dar formato y almacenar documentos escritos es:",ops:["Procesador de textos.","Hoja de cálculo.","Editor.","Navegador web."],c:0},
+    {n:101,q:"¿Cómo debe realizarse la cura del cordón umbilical del recién nacido?:",ops:["Con gasa seca.","Con gasa impregnada en povidona yodada.","Con gasa impregnada en clorhexidina acuosa al 2%.","Con gasa impregnada en clorhexidina alcohólica al 2%."],c:0},
+    {n:102,q:"En un enfermo con SNG, comprobamos el volumen residual y encontramos que tiene 100cc. ¿Qué debemos hacer?:",ops:["Avisar al médico de guardia.","Reintroducir el volumen residual y continuar con la alimentación enteral.","Parar el ciclo de administración enteral.","La comprobación del volumen residual no es necesaria si no hay síntomas que lo justifiquen."],c:1},
+    {n:103,q:"Tras la realización de la escala de Braden, el paciente obtiene una puntuación de 6 puntos, esto indica:",ops:["Sin riesgo.","Riesgo bajo.","Riesgo moderado.","Riesgo alto."],c:3},
+    {n:104,q:"Una hemorragia con salida de sangre roja y a borbotones, coincidiendo con los latidos cardiacos, es una hemorragia:",ops:["Venosa.","Capilar.","Arterial.","Exanguinante."],c:2},
+    {n:105,q:"Cuál de las siguientes definiciones se corresponde con parada cardiorrespiratoria:",ops:["Cese de la respiración y actividad cardiaca.","Interrupción brusca de la respiración y circulación.","Paro súbito de la circulación y función respiratoria.","Interrupción brusca, inesperada y potencialmente reversible de la respiración y circulación."],c:3},
+  ],
+  especificaReservaMid: [
+    {n:51,q:"Señala la opción correcta respecto a la deambulación con muletas:",ops:["Para bajar escaleras, primero se desciende con la pierna débil y después las muletas.","Para subir escaleras, primero se suben ambas muletas al escalón superior y después se asciende la pierna fuerte.","Cuando el paciente precisa una muleta solamente, la llevará con la mano contralateral a la pierna más débil.","Cuando el paciente precisa muletas, se las debe colocar en la articulación de la muñeca para que tenga más fuerza."],c:2},
+    {n:52,q:"A la hora de hacer la cama hospitalaria, ¿qué tipo de cama es aquella que está ocupada, pero en el momento de hacerla, no se encuentra el paciente en ella?:",ops:["Cama abierta.","Cama cerrada.","Cama ocupada.","Cama quirúgica."],c:0},
+    {n:53,q:"Una quemadura que afecta a la totalidad de la epidermis y a la dermis, en la que hay desprendimiento del folículo y que suele cicatrizar formando cicatrices hipertróficas se corresponde con:",ops:["Grado I.","Grado II superficial.","Grado II profunda.","Grado III."],c:2},
+    {n:54,q:"En el proceso de comunicación la dimensión proxémica estudia las distancias a las que se establece la comunicación. La distancia personal se desarrolla entre:",ops:["15 a 45 cm.","1,25 a 3,50 m.","Más de 3,50 m.","45 cm a 1,25 m."],c:3},
+    {n:55,q:"La piel del paciente tiene un pH de:",ops:["4.5.","5.5.","6.5.","7."],c:1},
+  ],
+  especificaReserva: [
+    {n:106,q:"La fase de la enfermedad en la que actúa la prevención secundaria es:",ops:["Periodo clínico.","Periodo presintomático.","Periodo prepatogénico.","Periodo patogénico."],c:1},
+    {n:107,q:"Durante el turno de hoy debe realizar el corte de uñas de manos y pies de una usuaria. Una de las siguientes opciones NO es correcta, debe marcarla:",ops:["Al terminar de cortar las uñas debe limarlas para evitar arañazos y lesiones.","Cortará en línea recta las uñas de los pies y de las manos para evitar complicaciones.","No dejará bordes irregulares ni esquirlas.","No se eliminará la cutícula."],c:1},
+    {n:108,q:"En la cicatrización de úlceras por presión, ¿qué fase se caracteriza por coagulación, inflamación y limpieza de la herida?:",ops:["Fase exudativa.","Fase de granulación.","Fase de epitelización.","Fase inflamatoria."],c:0},
+    {n:109,q:"Un paciente en decúbito supino NO tendrá riesgo de úlcera por presión en:",ops:["Occipital.","Escápulas.","Crestas ilíacas.","Codos."],c:2},
+    {n:110,q:"Lesión por presión que se caracteriza por ampolla intacta llena de suero o rota:",ops:["Úlcera por presión categoría I.","Úlcera por presión categoría II.","Úlcera por presión categoría III.","Úlcera por presión categoría IV."],c:1},
+  ],
+  respuestasOficiales: {
+    comun: {1:'A',2:'C',3:'B',4:'D',5:'A',6:'C',7:'D',8:'C',9:'C',10:'C',11:'A',12:'A'},
+    esp: {1:'B',2:'C',3:'D',4:'D',5:'A',6:'B',7:'C',8:'D',9:'B',10:'D',11:'C',12:'D',13:'D',14:'C',15:'D',16:'B',17:'B',18:'D',19:'B',20:'C',21:'D',22:'D',23:'A',24:'C',25:'C',26:'C',27:'B',28:'C',29:'A',30:'D',31:'B',32:'B',33:'D',34:'B',35:'B',36:'B',37:'A',38:'D',39:'C',40:'D',41:'C',42:'C',43:'B',44:'A',45:'A',46:'A',47:'A',48:'B',49:'D',50:'B',51:'C',52:'A',53:'C',54:'D',55:'B',56:'B',57:'C',58:'D',59:'A',60:'B',61:'C',62:'B',63:'C',64:'C',65:'A',66:'A',67:'A',68:'A',69:'A',70:'A',71:'C',72:'A',73:'C',74:'C',75:'C',76:'D',77:'C',78:'D',79:'A',80:'B',81:'B',82:'B',83:'C',84:'C',85:'D',86:'D',87:'B',88:'C',89:'B',90:'B',91:'D',92:'D',93:'A',94:'A',95:'B',96:'A',97:'B',98:'D',99:'B',100:'A',101:'A',102:'B',103:'D',104:'C',105:'D',106:'B',107:'B',108:'A',109:'C',110:'B'}
+  }
+};
+SIM06.especificaReservaTeo = SIM06.especificaReservaMid;
+SIM06.especificaReservaPrac = SIM06.especificaReserva;
 
 // Estado del simulacro (init anticipado para que goHome() pueda acceder)
 let simState = {
@@ -4694,11 +4625,13 @@ function startSimulacro02() { startSimulacroGeneric(SIM02, 'Simulacro 02', 'SIM0
 function startSimulacro03() { startSimulacroGeneric(SIM03, 'Simulacro 03 · OPE 2022', 'SIM03'); }
 function startSimulacro04() { startSimulacroGeneric(SIM04, 'Simulacro 04 · OPE 2019', 'SIM04'); }
 function startSimulacro05() { startSimulacroGeneric(SIM05, 'Simulacro 05 · OPE 2014/2015', 'SIM05'); }
+function startSimulacro06() { startSimulacroGeneric(SIM06, 'Simulacro 06 · Test Docentia', 'SIM06'); }
 function restartActiveSimulacro() {
   if(ACTIVE_SIM_KEY === 'SIM02') startSimulacro02();
   else if(ACTIVE_SIM_KEY === 'SIM03') startSimulacro03();
   else if(ACTIVE_SIM_KEY === 'SIM04') startSimulacro04();
   else if(ACTIVE_SIM_KEY === 'SIM05') startSimulacro05();
+  else if(ACTIVE_SIM_KEY === 'SIM06') startSimulacro06();
   else startSimulacro01();
 }
 
@@ -5152,6 +5085,22 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+
+// Cuenta atrás hasta el examen (25 de octubre)
+(function(){
+  const el = document.getElementById('examCountdownText');
+  if(!el) return;
+  const hoy = new Date();
+  hoy.setHours(0,0,0,0);
+  let examen = new Date(hoy.getFullYear(), 9, 25); // mes 9 = octubre (0-indexado)
+  if (examen < hoy) examen = new Date(hoy.getFullYear() + 1, 9, 25);
+  const dias = Math.round((examen - hoy) / (1000*60*60*24));
+  let texto;
+  if (dias === 0) texto = '🔥 ¡El examen es HOY!';
+  else if (dias === 1) texto = '⏳ Queda 1 día para el examen (25 de octubre)';
+  else texto = `⏳ Quedan ${dias} días para el examen (25 de octubre)`;
+  el.textContent = texto;
+})();
 </script>
 </body>
 </html>
