@@ -1083,19 +1083,19 @@ body{
     <div class="mode-card" onclick="startSimulacro03()" style="border-color:rgba(251,113,133,0.5);position:relative;overflow:hidden;">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#fb7185,#fbbf24);"></div>
       <div class="mode-card-icon">🏆</div>
-      <div class="mode-card-title">Simulacro 03 <span class="badge-nuevo" style="font-size:10px;padding:2px 8px;"><span class="punto-rojo"></span>NUEVO</span></div>
+      <div class="mode-card-title"><span id="simLabel03">Simulacro 03</span> <span class="badge-nuevo" style="font-size:10px;padding:2px 8px;"><span class="punto-rojo"></span>NUEVO</span></div>
       <div class="mode-card-desc">Examen OFICIAL real: OPE SERGAS 2022. 110 preguntas con la plantilla de respuestas definitiva del Servizo Galego de Saúde.</div>
     </div>
     <div class="mode-card" onclick="startSimulacro04()" style="border-color:rgba(251,113,133,0.5);position:relative;overflow:hidden;">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#fb7185,#fbbf24);"></div>
       <div class="mode-card-icon">🏆</div>
-      <div class="mode-card-title">Simulacro 04 <span class="badge-nuevo" style="font-size:10px;padding:2px 8px;"><span class="punto-rojo"></span>NUEVO</span></div>
+      <div class="mode-card-title"><span id="simLabel04">Simulacro 04</span> <span class="badge-nuevo" style="font-size:10px;padding:2px 8px;"><span class="punto-rojo"></span>NUEVO</span></div>
       <div class="mode-card-desc">Examen OFICIAL real: OPE SERGAS 2019. 110 preguntas con la plantilla de respuestas definitiva del Servizo Galego de Saúde.</div>
     </div>
     <div class="mode-card" onclick="startSimulacro05()" style="border-color:rgba(251,113,133,0.5);position:relative;overflow:hidden;">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#fb7185,#fbbf24);"></div>
       <div class="mode-card-icon">🏆</div>
-      <div class="mode-card-title">Simulacro 05 <span class="badge-nuevo" style="font-size:10px;padding:2px 8px;"><span class="punto-rojo"></span>NUEVO</span></div>
+      <div class="mode-card-title"><span id="simLabel05">Simulacro 05</span> <span class="badge-nuevo" style="font-size:10px;padding:2px 8px;"><span class="punto-rojo"></span>NUEVO</span></div>
       <div class="mode-card-desc">Examen OFICIAL real: OPE SERGAS 2014/2015. 110 preguntas con la plantilla de respuestas definitiva del Servizo Galego de Saúde.</div>
     </div>
     <div class="mode-card" id="simCard06" onclick="startSimulacro06()" style="display:none;border-color:rgba(167,139,250,0.5);position:relative;overflow:hidden;">
@@ -3552,6 +3552,13 @@ function init() {
       const el = document.getElementById(id);
       if (el) el.style.display = '';
     });
+  } else {
+    const l03 = document.getElementById('simLabel03');
+    const l04 = document.getElementById('simLabel04');
+    const l05 = document.getElementById('simLabel05');
+    if (l03) l03.textContent = 'Simulacro 1';
+    if (l04) l04.textContent = 'Simulacro 2';
+    if (l05) l05.textContent = 'Simulacro 3';
   }
   // Count per block
   const counts = {};
@@ -4653,9 +4660,9 @@ let ACTIVE_SIM_KEY = 'SIM01';
 
 function startSimulacro01() { startSimulacroGeneric(SIM01, 'Simulacro 01', 'SIM01'); }
 function startSimulacro02() { startSimulacroGeneric(SIM02, 'Simulacro 02', 'SIM02'); }
-function startSimulacro03() { startSimulacroGeneric(SIM03, 'Simulacro 03 · OPE 2022', 'SIM03'); }
-function startSimulacro04() { startSimulacroGeneric(SIM04, 'Simulacro 04 · OPE 2019', 'SIM04'); }
-function startSimulacro05() { startSimulacroGeneric(SIM05, 'Simulacro 05 · OPE 2014/2015', 'SIM05'); }
+function startSimulacro03() { startSimulacroGeneric(SIM03, (contenidoDesbloqueado() ? 'Simulacro 03' : 'Simulacro 1') + ' · OPE 2022', 'SIM03'); }
+function startSimulacro04() { startSimulacroGeneric(SIM04, (contenidoDesbloqueado() ? 'Simulacro 04' : 'Simulacro 2') + ' · OPE 2019', 'SIM04'); }
+function startSimulacro05() { startSimulacroGeneric(SIM05, (contenidoDesbloqueado() ? 'Simulacro 05' : 'Simulacro 3') + ' · OPE 2014/2015', 'SIM05'); }
 function startSimulacro06() { startSimulacroGeneric(SIM06, 'Simulacro 06', 'SIM06'); }
 function restartActiveSimulacro() {
   if(ACTIVE_SIM_KEY === 'SIM02') startSimulacro02();
